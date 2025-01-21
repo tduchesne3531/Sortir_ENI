@@ -43,7 +43,7 @@ class ParticipantFixtures extends Fixture
             $participant->setPhone($participantData['phone']);
             $participant->setEmail(strtolower($participantData['firstname'] . '.' . $participantData['lastname']) . '@mail.fr');
             $participant->setPassword($this->passwordHasher->hashPassword($participant, 'root'));
-            $participant->setActive(true);
+            $participant->setIsActive(true);
             $participant->setCreatedAt(new \DateTimeImmutable('now'));
             $participant->setSite($sitesFix -> get($participantData['site']));
 

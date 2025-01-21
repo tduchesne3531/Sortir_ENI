@@ -28,7 +28,7 @@ class PlaceFixtures extends Fixture
         foreach ($placesFixtures as $placeFix) {
             $place = new Place();
             $place->setName($placeFix['name']);
-            $place->setAdresse($placeFix['adresse']);
+            $place->setAddress($placeFix['adresse']);
             $place->setLatitude($placeFix['latitude']);
             $place->setLongitude($placeFix['longitude']);
             $place->setCity($citiesFix -> get($placeFix['city']));

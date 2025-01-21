@@ -2,19 +2,19 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Activity;
 use App\Entity\Participant;
-use App\Entity\Sortie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class SortieFixtures extends Fixture
+class ActivityFixtures extends Fixture
 {
     /**
      * @throws \DateMalformedStringException
      */
     public function load(ObjectManager $manager): void
     {
-        $sortiesFix = [
+        $activitiesFix = [
             ['nom' => 'Sortie 1', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
             ['nom' => 'Sortie 2', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
             ['nom' => 'Sortie 3', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
@@ -29,14 +29,14 @@ class SortieFixtures extends Fixture
         ];
         $participantsFix = $manager->getRepository(Participant::class)->findAll();
 
-        foreach ($sortiesFix as $sortieFix) {
-            $sortie = new Sortie();
-            $sortie->setName($sortieFix['nom']);
-            $sortie->setDateStartTime(new \DateTime($sortieFix['debut']));
-            $sortie->setDuration($sortieFix['duree']);
-            $sortie->setMaxRegistration(new \DateTime($sortieFix['limiteInscription']));
-            $sortie->setMaxRegistration($sortieFix['nbMax']);
-            $sortie->setCreatedUser($sortieFix[$participantsFix->get(0)]);
+        foreach ($activitiesFix as $activityFix) {
+            $sortie = new Activity();
+            $sortie->setName($activityFix['nom']);
+            $sortie->setDateStartTime(new \DateTime($activityFix['debut']));
+            $sortie->setDuration($activityFix['duree']);
+            $sortie->setRegistrationDeadLine(new \DateTime($activityFix['limiteInscription']));
+            $sortie->setMaxRegistration($activityFix['nbMax']);
+            $sortie->setCreatedBy($participantsFix->get(0));
 
             $manager->persist($sortie);
         }
