@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WhoAndWhenTrait;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,8 +10,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
-class Sortie
+class Activity
 {
+    use WhoAndWhenTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -41,9 +44,6 @@ class Sortie
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     private ?Site $site = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $createdUser = null;
 
     /**
      * @var Collection<int, Participant>
@@ -51,8 +51,6 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
     private Collection $participants;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $CreatedAt = null;
 
     public function __construct()
     {
@@ -180,28 +178,6 @@ class Sortie
     public function removeParticipant(Participant $participant): static
     {
         $this->participants->removeElement($participant);
-
-        return $this;
-    }
-
-    public function getCreatedUser(): ?Participant
-    {
-        return $this->createdUser;
-    }
-
-    public function setCreatedUser(?Participant $createdUser): void
-    {
-        $this->createdUser = $createdUser;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->CreatedAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
-    {
-        $this->CreatedAt = $CreatedAt;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WhoAndWhenTrait;
 use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
 {
+    use WhoAndWhenTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,13 +28,11 @@ class Site
     private Collection $participants;
 
     /**
-     * @var Collection<int, Sortie>
+     * @var Collection<int, Activity>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'site')]
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'site')]
     private Collection $sorties;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $CreatedAt = null;
 
     public function __construct()
     {
@@ -72,16 +73,6 @@ class Site
     public function setSorties(Collection $sorties): void
     {
         $this->sorties = $sorties;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->CreatedAt;
-    }
-
-    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
-    {
-        $this->CreatedAt = $CreatedAt;
     }
 
 }

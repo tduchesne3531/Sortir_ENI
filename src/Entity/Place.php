@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WhoAndWhenTrait;
 use App\Repository\PlaceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
 {
+    use WhoAndWhenTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -17,7 +20,7 @@ class Place
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
+    private ?string $address = null;
 
     #[ORM\Column]
     private ?float $latitude = null;
@@ -28,9 +31,6 @@ class Place
     #[ORM\ManyToOne(inversedBy: 'places')]
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $CreatedAt = null;
 
     public function getId(): ?int
     {
@@ -47,14 +47,14 @@ class Place
         $this->name = $name;
     }
 
-    public function getAdresse(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adresse;
+        return $this->address;
     }
 
-    public function setAdresse(?string $adresse): void
+    public function setAddress(?string $address): void
     {
-        $this->adresse = $adresse;
+        $this->address = $address;
     }
 
     public function getLatitude(): ?float
@@ -85,16 +85,6 @@ class Place
     public function setCity(?City $city): void
     {
         $this->city = $city;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->CreatedAt;
-    }
-
-    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
-    {
-        $this->CreatedAt = $CreatedAt;
     }
 
 }

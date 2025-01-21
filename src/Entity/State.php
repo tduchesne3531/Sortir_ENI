@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WhoAndWhenTrait;
 use App\Repository\StateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: StateRepository::class)]
 class State
 {
+    use WhoAndWhenTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -19,13 +22,10 @@ class State
     private ?string $name = null;
 
     /**
-     * @var Collection<int, Sortie>
+     * @var Collection<int, Activity>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'state', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'state', orphanRemoval: true)]
     private Collection $sorties;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $CreatedAt = null;
 
     public function __construct()
     {
@@ -50,14 +50,14 @@ class State
     }
 
     /**
-     * @return Collection<int, Sortie>
+     * @return Collection<int, Activity>
      */
     public function getSorties(): Collection
     {
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sortie): static
+    public function addSortie(Activity $sortie): static
     {
         if (!$this->sorties->contains($sortie)) {
             $this->sorties->add($sortie);
@@ -67,7 +67,7 @@ class State
         return $this;
     }
 
-    public function removeSortie(Sortie $sortie): static
+    public function removeSortie(Activity $sortie): static
     {
         if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
@@ -75,18 +75,6 @@ class State
                 $sortie->setState(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->CreatedAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
-    {
-        $this->CreatedAt = $CreatedAt;
 
         return $this;
     }

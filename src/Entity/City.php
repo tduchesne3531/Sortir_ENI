@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CitieRepository;
+use App\Entity\Traits\WhoAndWhenTrait;
+use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CitieRepository::class)]
+#[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
 {
+    use WhoAndWhenTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,11 +30,6 @@ class City
     #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city')]
     private Collection $places;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $CreatedAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'citiesCreated')]
-    private ?Participant $UserCreation = null;
 
     public function __construct()
     {
@@ -71,26 +69,6 @@ class City
     public function setPlaces(Collection $places): void
     {
         $this->places = $places;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->CreatedAt;
-    }
-
-    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
-    {
-        $this->CreatedAt = $CreatedAt;
-    }
-
-    public function getUserCreation(): ?Participant
-    {
-        return $this->UserCreation;
-    }
-
-    public function setUserCreation(?Participant $UserCreation): void
-    {
-        $this->UserCreation = $UserCreation;
     }
 
 }
