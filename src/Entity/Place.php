@@ -27,7 +27,7 @@ class Place
 
     #[ORM\ManyToOne(inversedBy: 'places')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Citie $citie = null;
+    private ?City $city = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $CreatedAt = null;
@@ -42,11 +42,9 @@ class Place
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getAdresse(): ?string
@@ -54,11 +52,9 @@ class Place
         return $this->adresse;
     }
 
-    public function setAdresse(string $adresse): static
+    public function setAdresse(?string $adresse): void
     {
         $this->adresse = $adresse;
-
-        return $this;
     }
 
     public function getLatitude(): ?float
@@ -66,11 +62,9 @@ class Place
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): static
+    public function setLatitude(?float $latitude): void
     {
         $this->latitude = $latitude;
-
-        return $this;
     }
 
     public function getLongitude(): ?float
@@ -78,23 +72,19 @@ class Place
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): static
+    public function setLongitude(?float $longitude): void
     {
         $this->longitude = $longitude;
-
-        return $this;
     }
 
-    public function getCitie(): ?Citie
+    public function getCity(): ?City
     {
-        return $this->citie;
+        return $this->city;
     }
 
-    public function setCitie(?Citie $citie): static
+    public function setCity(?City $city): void
     {
-        $this->citie = $citie;
-
-        return $this;
+        $this->city = $city;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -102,10 +92,9 @@ class Place
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
+    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
     {
         $this->CreatedAt = $CreatedAt;
-
-        return $this;
     }
+
 }
