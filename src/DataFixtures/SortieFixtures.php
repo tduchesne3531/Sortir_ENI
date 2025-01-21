@@ -34,7 +34,7 @@ class SortieFixtures extends Fixture
             $sortie->setName($sortieFix['nom']);
             $sortie->setDateStartTime(new \DateTime($sortieFix['debut']));
             $sortie->setDuration($sortieFix['duree']);
-            $sortie->setMaxRegistration($sortieFix['limiteInscription']);
+            $sortie->setMaxRegistration(new \DateTime($sortieFix['limiteInscription']));
             $sortie->setMaxRegistration($sortieFix['nbMax']);
             $sortie->setCreatedUser($sortieFix[$participantsFix->get(0)]);
 
