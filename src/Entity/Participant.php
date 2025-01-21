@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-class Participant
+class Participant extends User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -47,9 +47,9 @@ class Participant
     private ?\DateTimeImmutable $CreatedAt = null;
 
     /**
-     * @var Collection<int, Citie>
+     * @var Collection<int, City>
      */
-    #[ORM\OneToMany(targetEntity: Citie::class, mappedBy: 'UserCreation')]
+    #[ORM\OneToMany(targetEntity: City::class, mappedBy: 'UserCreation')]
     private Collection $citiesCreated;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'participantsCreated')]
@@ -60,16 +60,6 @@ class Participant
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'UserCreation')]
     private Collection $participantsCreated;
-
-    public function getSorties(): Collection
-    {
-        return $this->sorties;
-    }
-
-    public function setSorties(Collection $sorties): void
-    {
-        $this->sorties = $sorties;
-    }
 
     public function __construct()
     {
@@ -89,11 +79,9 @@ class Participant
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): static
+    public function setFirstname(?string $firstname): void
     {
         $this->firstname = $firstname;
-
-        return $this;
     }
 
     public function getLastname(): ?string
@@ -101,11 +89,9 @@ class Participant
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): static
+    public function setLastname(?string $lastname): void
     {
         $this->lastname = $lastname;
-
-        return $this;
     }
 
     public function getPhone(): ?string
@@ -113,23 +99,19 @@ class Participant
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): static
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
-
-        return $this;
     }
 
-    public function isActive(): ?bool
+    public function getActive(): ?bool
     {
         return $this->active;
     }
 
-    public function setActive(bool $active): static
+    public function setActive(?bool $active): void
     {
         $this->active = $active;
-
-        return $this;
     }
 
     public function getSite(): ?Site
@@ -137,41 +119,29 @@ class Participant
         return $this->site;
     }
 
-    public function setSite(?Site $site): static
+    public function setSite(?Site $site): void
     {
         $this->site = $site;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Sortie>
-     */
     public function getSortiesManaged(): Collection
     {
         return $this->sortiesManaged;
     }
 
-    public function addSortiesManaged(Sortie $sortie): static
+    public function setSortiesManaged(Collection $sortiesManaged): void
     {
-        if (!$this->sortiesManaged->contains($sortie)) {
-            $this->sortiesManaged->add($sortie);
-            $sortie->setCreatedUser($this);
-        }
-
-        return $this;
+        $this->sortiesManaged = $sortiesManaged;
     }
 
-    public function removeSortiesManaged(Sortie $sortie): static
+    public function getSorties(): Collection
     {
-        if ($this->sortiesManaged->removeElement($sortie)) {
-            // set the owning side to null (unless already changed)
-            if ($sortie->getCreatedUser() === $this) {
-                $sortie->setCreatedUser(null);
-            }
-        }
+        return $this->sorties;
+    }
 
-        return $this;
+    public function setSorties(Collection $sorties): void
+    {
+        $this->sorties = $sorties;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -179,82 +149,39 @@ class Participant
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
+    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
     {
         $this->CreatedAt = $CreatedAt;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Citie>
-     */
     public function getCitiesCreated(): Collection
     {
         return $this->citiesCreated;
     }
 
-    public function addCitiesCreated(Citie $citiesCreated): static
+    public function setCitiesCreated(Collection $citiesCreated): void
     {
-        if (!$this->citiesCreated->contains($citiesCreated)) {
-            $this->citiesCreated->add($citiesCreated);
-            $citiesCreated->setUserCreation($this);
-        }
-
-        return $this;
+        $this->citiesCreated = $citiesCreated;
     }
 
-    public function removeCitiesCreated(Citie $citiesCreated): static
-    {
-        if ($this->citiesCreated->removeElement($citiesCreated)) {
-            // set the owning side to null (unless already changed)
-            if ($citiesCreated->getUserCreation() === $this) {
-                $citiesCreated->setUserCreation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getUserCreation(): ?self
+    public function getUserCreation(): ?Participant
     {
         return $this->UserCreation;
     }
 
-    public function setUserCreation(?self $UserCreation): static
+    public function setUserCreation(?Participant $UserCreation): void
     {
         $this->UserCreation = $UserCreation;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, self>
-     */
     public function getParticipantsCreated(): Collection
     {
         return $this->participantsCreated;
     }
 
-    public function addParticipantsCreated(self $participantsCreated): static
+    public function setParticipantsCreated(Collection $participantsCreated): void
     {
-        if (!$this->participantsCreated->contains($participantsCreated)) {
-            $this->participantsCreated->add($participantsCreated);
-            $participantsCreated->setUserCreation($this);
-        }
-
-        return $this;
+        $this->participantsCreated = $participantsCreated;
     }
 
-    public function removeParticipantsCreated(self $participantsCreated): static
-    {
-        if ($this->participantsCreated->removeElement($participantsCreated)) {
-            // set the owning side to null (unless already changed)
-            if ($participantsCreated->getUserCreation() === $this) {
-                $participantsCreated->setUserCreation(null);
-            }
-        }
-
-        return $this;
-    }
 }

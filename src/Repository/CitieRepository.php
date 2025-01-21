@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\Citie;
+use App\Entity\City;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Citie>
+ * @extends ServiceEntityRepository<City>
  */
 class CitieRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Citie::class);
+        parent::__construct($registry, City::class);
     }
 
 //    /**

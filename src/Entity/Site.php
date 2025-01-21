@@ -49,71 +49,29 @@ class Site
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Participant>
-     */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participant $participant): static
+    public function setParticipants(Collection $participants): void
     {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            $participant->setSite($this);
-        }
-
-        return $this;
+        $this->participants = $participants;
     }
 
-    public function removeParticipant(Participant $participant): static
-    {
-        if ($this->participants->removeElement($participant)) {
-            // set the owning side to null (unless already changed)
-            if ($participant->getSite() === $this) {
-                $participant->setSite(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Sortie>
-     */
     public function getSorties(): Collection
     {
         return $this->sorties;
     }
 
-    public function addSorty(Sortie $sorty): static
+    public function setSorties(Collection $sorties): void
     {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties->add($sorty);
-            $sorty->setSite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSorty(Sortie $sorty): static
-    {
-        if ($this->sorties->removeElement($sorty)) {
-            // set the owning side to null (unless already changed)
-            if ($sorty->getSite() === $this) {
-                $sorty->setSite(null);
-            }
-        }
-
-        return $this;
+        $this->sorties = $sorties;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -121,10 +79,9 @@ class Site
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
+    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
     {
         $this->CreatedAt = $CreatedAt;
-
-        return $this;
     }
+
 }

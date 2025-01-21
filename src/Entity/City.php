@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CitieRepository::class)]
-class Citie
+class City
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,7 +24,7 @@ class Citie
     /**
      * @var Collection<int, Place>
      */
-    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'citie')]
+    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city')]
     private Collection $places;
 
     #[ORM\Column]
@@ -48,11 +48,9 @@ class Citie
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getZipCode(): ?string
@@ -60,41 +58,19 @@ class Citie
         return $this->zipCode;
     }
 
-    public function setZipCode(?string $zipCode): static
+    public function setZipCode(?string $zipCode): void
     {
         $this->zipCode = $zipCode;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Place>
-     */
     public function getPlaces(): Collection
     {
         return $this->places;
     }
 
-    public function addPlace(Place $place): static
+    public function setPlaces(Collection $places): void
     {
-        if (!$this->places->contains($place)) {
-            $this->places->add($place);
-            $place->setCitie($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlace(Place $place): static
-    {
-        if ($this->places->removeElement($place)) {
-            // set the owning side to null (unless already changed)
-            if ($place->getCitie() === $this) {
-                $place->setCitie(null);
-            }
-        }
-
-        return $this;
+        $this->places = $places;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -102,11 +78,9 @@ class Citie
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $CreatedAt): static
+    public function setCreatedAt(?\DateTimeImmutable $CreatedAt): void
     {
         $this->CreatedAt = $CreatedAt;
-
-        return $this;
     }
 
     public function getUserCreation(): ?Participant
@@ -114,10 +88,9 @@ class Citie
         return $this->UserCreation;
     }
 
-    public function setUserCreation(?Participant $UserCreation): static
+    public function setUserCreation(?Participant $UserCreation): void
     {
         $this->UserCreation = $UserCreation;
-
-        return $this;
     }
+
 }
