@@ -6,6 +6,12 @@
 parameters:
 
 services:
+    App\EventListeners\WhoAndWhenListener:
+        arguments:
+            $security: '@security.helper'
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
