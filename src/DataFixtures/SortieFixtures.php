@@ -9,6 +9,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class SortieFixtures extends Fixture
 {
+    /**
+     * @throws \DateMalformedStringException
+     */
     public function load(ObjectManager $manager): void
     {
         $sortiesFix = [
