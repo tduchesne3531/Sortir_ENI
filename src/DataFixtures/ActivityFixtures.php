@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Activity;
 use App\Entity\Participant;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -27,7 +28,7 @@ class ActivityFixtures extends Fixture
             ['nom' => 'Sortie 10', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
             ['nom' => 'Sortie 11', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
         ];
-        $participantsFix = $manager->getRepository(Participant::class)->findAll();
+        $usersFix = $manager->getRepository(User::class)->findAll();
 
         foreach ($activitiesFix as $activityFix) {
             $sortie = new Activity();
@@ -36,7 +37,7 @@ class ActivityFixtures extends Fixture
             $sortie->setDuration($activityFix['duree']);
             $sortie->setRegistrationDeadLine(new \DateTime($activityFix['limiteInscription']));
             $sortie->setMaxRegistration($activityFix['nbMax']);
-            $sortie->setCreatedBy($participantsFix->get(0));
+            $sortie->setCreatedBy(new User());
 
             $manager->persist($sortie);
         }
