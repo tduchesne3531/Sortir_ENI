@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Site;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class SiteFixtures extends Fixture
@@ -22,7 +23,6 @@ class SiteFixtures extends Fixture
 
             $manager->persist($site);
             $this->addReference('site_' . $index, $site);
-            dd($index);
         }
 
         $manager->flush();
