@@ -1,0 +1,28 @@
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    table th, table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    table th { background-color: #f4f4f4; }
+</style>
+
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>Nom des villes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for city in cities %}
+            <tr>
+                <td>{{ city.name }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucune ville trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

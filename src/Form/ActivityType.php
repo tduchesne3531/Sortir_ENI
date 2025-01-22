@@ -27,31 +27,8 @@ class ActivityType extends AbstractType
             ])
             ->add('maxRegistration')
             ->add('description')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('state', EntityType::class, [
-                'class' => State::class,
-                'choice_label' => 'id',
-            ])
             ->add('site', EntityType::class, [
                 'class' => Site::class,
-                'choice_label' => 'id',
-            ])
-            ->add('participants', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('createdBy', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('updatedBy', EntityType::class, [
-                'class' => User::class,
                 'choice_label' => 'id',
             ])
         ;

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: StateRepository::class)]
 class State
 {
-//    use WhoAndWhenTrait;
+    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +30,8 @@ class State
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

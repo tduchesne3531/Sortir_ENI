@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
 {
-//    use WhoAndWhenTrait;
+    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -38,6 +38,8 @@ class Site
     {
         $this->participants = new ArrayCollection();
         $this->sorties = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

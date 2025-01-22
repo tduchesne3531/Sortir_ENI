@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Activity
 {
-//    use WhoAndWhenTrait;
+    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -61,6 +61,8 @@ class Activity
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

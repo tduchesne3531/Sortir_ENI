@@ -24,20 +24,12 @@
         {% for activity in activities %}
             <tr>
                 <td>{{ activity.name }}</td>
-                <td>{{ activity.date|date('d/m/Y H:i') }}</td>
-                <td>{{ activity.closureDate|date('d/m/Y H:i') }}</td>
-                <td>{{ activity.participants|length }}</td>
+                <td>{{ activity.dateStartTime|date('d/m/Y H:i') }}</td>
+                <td>{{ activity.registrationDeadLine|date('d/m/Y H:i') }}</td>
+                <td>{{ activity.inscrits }} / {{ activity.maxRegistration }}</td>
                 <td>{{ activity.state }}</td>
-                <td>{{ activity.isUserRegistered ? 'Oui' : 'Non' }}</td>
-                <td>{{ activity.organizer.fullname }}</td>
-                <td>
-                    <a href="{{ path('app_activity_details', {id: activity.id}) }}">Détails</a>
-                    {% if not activity.isUserRegistered %}
-                        <a href="{{ path('app_activity_register', {id: activity.id}) }}">S'inscrire</a>
-                    {% else %}
-                        <a href="{{ path('app_activity_unregister', {id: activity.id}) }}">Se désinscrire</a>
-                    {% endif %}
-                </td>
+                <td>{{ activity.incrit ? 'X' : ' ' }}</td>
+                <td>{{ activity.organisateur }}</td>
             </tr>
         {% else %}
             <tr>
