@@ -1,3 +1,54 @@
-body {
-    background-color: skyblue;
+header {
+    display: flex;
+    align-items: center; /* Aligne verticalement les éléments */
+    justify-content: space-between; /* Sépare les éléments horizontalement */
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Couleur de fond, ajustable */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour le style */
 }
+
+header img {
+    height: 50px; /* Ajuste la taille du logo */
+    width: auto; /* Conserve les proportions */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem; /* Ajuste la taille du titre */
+    color: #333; /* Couleur du texte */
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Affiche les éléments en ligne */
+    gap: 15px; /* Espace entre les éléments */
+}
+
+header nav ul li a {
+    text-decoration: none; /* Supprime le soulignement des liens */
+    color: #007bff; /* Couleur des liens */
+    font-weight: bold; /* Met les liens en gras */
+    transition: color 0.3s ease; /* Animation fluide */
+}
+
+header nav ul li a:hover {
+    color: #0056b3; /* Couleur au survol */
+}
+
+footer {
+    background-color: #333; /* Fond sombre */
+    color: #fff; /* Texte clair */
+    text-align: center; /* Centre le texte */
+    padding: 10px 0; /* Ajoute un peu d'espace vertical */
+    font-size: 0.9rem; /* Taille de texte plus petite */
+    position: relative; /* Utile pour un positionnement futur */
+    bottom: 0;
+    width: 100%; /* Assure que le footer s'étend sur toute la largeur */
+}
+
+footer p {
+    margin: 0; /* Supprime les marges par défaut */
+}
+
