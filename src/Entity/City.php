@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
 {
-    use WhoAndWhenTrait;
+//    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,7 +27,7 @@ class City
     /**
      * @var Collection<int, Place>
      */
-    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city')]
+    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city', cascade: ['persist'])]
     private Collection $places;
 
 
