@@ -40,4 +40,13 @@ class ParticipantRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function save(Participant $participant): void {
+        $this->getEntityManager()->persist($participant);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Participant $participant): void {
+        $this->getEntityManager()->remove($participant);
+    }
 }

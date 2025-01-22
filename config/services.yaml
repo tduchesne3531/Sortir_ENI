@@ -10,8 +10,8 @@ services:
         arguments:
             $security: '@security.helper'
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: prePersist, priority: 10 }
+            - { name: doctrine.event_listener, event: preUpdate, priority: 10 }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
