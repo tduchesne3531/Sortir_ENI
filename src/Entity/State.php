@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: StateRepository::class)]
 class State
 {
-    use WhoAndWhenTrait;
+//    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
