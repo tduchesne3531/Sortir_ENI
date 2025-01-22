@@ -51,6 +51,9 @@ class Activity
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
     private Collection $participants;
 
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Place $place = null;
+
 
     public function __construct()
     {
@@ -178,6 +181,18 @@ class Activity
     public function removeParticipant(Participant $participant): static
     {
         $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): static
+    {
+        $this->place = $place;
 
         return $this;
     }

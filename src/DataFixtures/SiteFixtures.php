@@ -12,14 +12,15 @@ class SiteFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $sitesFix = [
-            'Rennes',
-            'Brest'
+            ['Name' => 'Rennes'],
+            ['Name' => 'Brest']
         ];
 
-        foreach ($sitesFix as $name) {
+        foreach ($sitesFix as $index => $siteData) {
             $site = new Site();
-            $site->setName($name);
+            $site->setName($siteData['Name']);
 
+            $this->addReference('site_' . $index, $site);
             $manager->persist($site);
         }
 

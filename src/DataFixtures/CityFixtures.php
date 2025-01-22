@@ -17,11 +17,12 @@ class CityFixtures extends Fixture
             ['Name' => 'Brest', "zip" => '29000']
         ];
 
-        foreach ($citiesFix as $cityData) {
+        foreach ($citiesFix as $index => $cityData) {
             $city = new City();
             $city->setName($cityData['Name']);
             $city->setZipCode($cityData['zip']);
 
+            $this->addReference('city_' . $index, $city);
             $manager->persist($city);
         }
 

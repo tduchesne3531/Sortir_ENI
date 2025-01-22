@@ -12,27 +12,26 @@ class PlaceFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
         $placesFixtures = [
-            ['name' => 'lieu 1', 'adresse' => 'rue 1', 'latitude' => '11.11', 'longitude' => '11.11', 'city' => 1],
-            ['name' => 'lieu 2', 'adresse' => 'rue 2', 'latitude' => '22.22', 'longitude' => '22.22', 'city' => 1],
-            ['name' => 'lieu 3', 'adresse' => 'rue 3', 'latitude' => '33.33', 'longitude' => '33.33', 'city' => 2],
-            ['name' => 'lieu 4', 'adresse' => 'rue 4', 'latitude' => '44.44', 'longitude' => '44.44', 'city' => 2],
-            ['name' => 'lieu 5', 'adresse' => 'rue 5', 'latitude' => '55.55', 'longitude' => '55.55', 'city' => 3],
-            ['name' => 'lieu 6', 'adresse' => 'rue 6', 'latitude' => '66.66', 'longitude' => '66.66', 'city' => 3],
-            ['name' => 'lieu 7', 'adresse' => 'rue 7', 'latitude' => '77.77', 'longitude' => '77.77', 'city' => 4],
-            ['name' => 'lieu 8', 'adresse' => 'rue 8', 'latitude' => '88.88', 'longitude' => '88.88', 'city' => 4]
+            ['name' => 'lieu 1', 'adresse' => 'rue 1', 'latitude' => '11.11', 'longitude' => '11.11', 'city' => 0],
+            ['name' => 'lieu 2', 'adresse' => 'rue 2', 'latitude' => '22.22', 'longitude' => '22.22', 'city' => 0],
+            ['name' => 'lieu 3', 'adresse' => 'rue 3', 'latitude' => '33.33', 'longitude' => '33.33', 'city' => 1],
+            ['name' => 'lieu 4', 'adresse' => 'rue 4', 'latitude' => '44.44', 'longitude' => '44.44', 'city' => 1],
+            ['name' => 'lieu 5', 'adresse' => 'rue 5', 'latitude' => '55.55', 'longitude' => '55.55', 'city' => 2],
+            ['name' => 'lieu 6', 'adresse' => 'rue 6', 'latitude' => '66.66', 'longitude' => '66.66', 'city' => 2],
+            ['name' => 'lieu 7', 'adresse' => 'rue 7', 'latitude' => '77.77', 'longitude' => '77.77', 'city' => 3],
+            ['name' => 'lieu 8', 'adresse' => 'rue 8', 'latitude' => '88.88', 'longitude' => '88.88', 'city' => 3]
         ];
-        $citiesFix = $manager->getRepository(City::class)->findAll();
 
-        foreach ($placesFixtures as $placeFix) {
+        foreach ($placesFixtures as $index => $placeData) {
             $place = new Place();
-            $place->setName($placeFix['name']);
-            $place->setAddress($placeFix['adresse']);
-            $place->setLatitude($placeFix['latitude']);
-            $place->setLongitude($placeFix['longitude']);
-            $place->setCity($citiesFix -> get($placeFix['city']));
+            $place->setName($placeData['name']);
+            $place->setAddress($placeData['adresse']);
+            $place->setLatitude($placeData['latitude']);
+            $place->setLongitude($placeData['longitude']);
+            $place->setCity($this->getReference('city_' . $placeData['city']));
 
+            $this->addReference('place_' . $index, $place);
             $manager->persist($place);
         }
 

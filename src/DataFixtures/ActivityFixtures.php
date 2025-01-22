@@ -16,30 +16,34 @@ class ActivityFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $activitiesFix = [
-            ['nom' => 'Sortie 1', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 2', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 3', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 4', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 5', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 6', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 7', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 8', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 9', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 10', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
-            ['nom' => 'Sortie 11', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'etat' => 1],
+            ['nom' => 'Sortie 1', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 0, 'place' => 0, 'site' => 0, 'etat' => 0],
+            ['nom' => 'Sortie 2', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 0, 'place' => 1, 'site' => 0, 'etat' => 0],
+            ['nom' => 'Sortie 3', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 0, 'place' => 1, 'site' => 0, 'etat' => 0],
+            ['nom' => 'Sortie 4', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 0, 'place' => 2, 'site' => 0, 'etat' => 0],
+            ['nom' => 'Sortie 5', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 0, 'place' => 2, 'site' => 0, 'etat' => 0],
+            ['nom' => 'Sortie 6', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 1, 'place' => 3, 'site' => 1, 'etat' => 0],
+            ['nom' => 'Sortie 7', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 1, 'place' => 4, 'site' => 1, 'etat' => 0],
+            ['nom' => 'Sortie 8', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 1, 'place' => 5, 'site' => 1, 'etat' => 0],
+            ['nom' => 'Sortie 9', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 1, 'place' => 6, 'site' => 1, 'etat' => 0],
+            ['nom' => 'Sortie 10', 'debut' => '2024-10-01', 'duree' => 120, 'limiteInscription' => '2024-09-01', 'nbMax' => 2, 'info' => 'info', 'organisteur' => 1, 'place' => 7, 'site' => 1, 'etat' => 0]
         ];
-        $usersFix = $manager->getRepository(User::class)->findAll();
 
-        foreach ($activitiesFix as $activityFix) {
-            $sortie = new Activity();
-            $sortie->setName($activityFix['nom']);
-            $sortie->setDateStartTime(new \DateTime($activityFix['debut']));
-            $sortie->setDuration($activityFix['duree']);
-            $sortie->setRegistrationDeadLine(new \DateTime($activityFix['limiteInscription']));
-            $sortie->setMaxRegistration($activityFix['nbMax']);
-            $sortie->setCreatedBy(new User());
+        foreach ($activitiesFix as $index => $activityData) {
+            $activity = new Activity();
+            $activity->setName($activityData['nom']);
+            $activity->setDateStartTime(new \DateTime($activityData['debut']));
+            $activity->setDuration($activityData['duree']);
+            $activity->setRegistrationDeadLine(new \DateTime($activityData['limiteInscription']));
+            $activity->setMaxRegistration($activityData['nbMax']);
+            $activity->setSite($this->getReference('site_' . $activityData['site']));
+            $activity->setState($this->getReference('state_' . $activityData['state']));
+            $activity->setCreatedBy($this->getReference('participant_' . $activityData['organisteur']));
+            $activity->setPlace($this->getReference('place_' . $activityData['place']));
 
-            $manager->persist($sortie);
+            $activity->setCreatedBy(new User());
+
+            $this->addReference('activity_' . $index, $activity);
+            $manager->persist($activity);
         }
 
         $manager->flush();

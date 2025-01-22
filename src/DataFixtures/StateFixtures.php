@@ -11,18 +11,19 @@ class StateFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $statesFix = [
-            'Créée',
-            'Ouverte',
-            'Clôturée',
-            'Activité en cours',
-            'passée',
-            'Annulée'
+            ['Name' => 'Créée'],
+            ['Name' => 'Ouverte'],
+            ['Name' => 'Clôturée'],
+            ['Name' => 'Activité en cours'],
+            ['Name' => 'passée'],
+            ['Name' => 'Annulée']
     ];
 
-        foreach ($statesFix as $stateName) {
+        foreach ($statesFix as $index => $stateData) {
             $state = new State();
-            $state->setName($stateName);
+            $state->setName($stateData['Name']);
 
+            $this->addReference('state_' . $index, $state);
             $manager->persist($state);
         }
 
