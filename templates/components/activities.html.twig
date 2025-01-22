@@ -1,0 +1,49 @@
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    table th, table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    table th { background-color: #f4f4f4; }
+</style>
+
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture</th>
+            <th>Inscrits/Places</th>
+            <th>État</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for activity in activities %}
+            <tr>
+                <td>{{ activity.name }}</td>
+                <td>{{ activity.date|date('d/m/Y H:i') }}</td>
+                <td>{{ activity.closureDate|date('d/m/Y H:i') }}</td>
+                <td>{{ activity.participants|length }}</td>
+                <td>{{ activity.state }}</td>
+                <td>{{ activity.isUserRegistered ? 'Oui' : 'Non' }}</td>
+                <td>{{ activity.organizer.fullname }}</td>
+                <td>
+                    <a href="{{ path('app_activity_details', {id: activity.id}) }}">Détails</a>
+                    {% if not activity.isUserRegistered %}
+                        <a href="{{ path('app_activity_register', {id: activity.id}) }}">S'inscrire</a>
+                    {% else %}
+                        <a href="{{ path('app_activity_unregister', {id: activity.id}) }}">Se désinscrire</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucune activité trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

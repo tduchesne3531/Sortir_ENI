@@ -1,0 +1,41 @@
+<h2>Filtre des sorties</h2>
+
+<form method="GET" action="{{ path('app_all_activityies') }}">
+    <div class="filter-group">
+        <!-- Filtre par site -->
+        <label for="site">Site :</label>
+        <select id="site" name="site">
+            <option value="">Tous les sites</option>
+            {% for site in sites %}
+                <option value="{{ site.id }}">{{ site.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <!-- Filtre par nom -->
+        <label for="name">Le nom de la sortie contient :</label>
+        <input type="text" id="name" name="name" placeholder="Nom de la sortie" value="{{ app.request.query.get('name', '') }}">
+    </div>
+
+    <div class="filter-group">
+        <!-- Filtre par date -->
+        <label for="startDate">Entre :</label>
+        <input type="date" id="startDate" name="startDate" value="{{ app.request.query.get('startDate', '') }}">
+        <label for="endDate">et :</label>
+        <input type="date" id="endDate" name="endDate" value="{{ app.request.query.get('endDate', '') }}">
+    </div>
+
+    <div class="filter-group">
+        <!-- Filtre organisateur -->
+        <label for="organizer">
+            <input type="checkbox" id="organizer" name="organizer" value="1" {% if app.request.query.get('organizer') %}checked{% endif %}>
+            Sorties dont je suis l'organisateur/trice
+        </label>
+    </div>
+
+    <div class="filter-group">
+        <!-- Bouton de recherche -->
+        <button type="submit">Recherche</button>
+    </div>
+</form>
