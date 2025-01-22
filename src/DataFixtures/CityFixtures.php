@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\City;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -22,8 +23,8 @@ class CityFixtures extends Fixture
             $city->setName($cityData['Name']);
             $city->setZipCode($cityData['zip']);
 
-            $this->addReference('city_' . $index, $city);
             $manager->persist($city);
+            $this->addReference('city_' . $index, $city);
         }
 
         $manager->flush();

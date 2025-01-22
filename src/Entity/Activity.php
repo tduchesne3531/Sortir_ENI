@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Activity
 {
-    use WhoAndWhenTrait;
+//    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -53,6 +53,9 @@ class Activity
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
     private ?Place $place = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Participant $manager = null;
 
 
     public function __construct()
@@ -193,6 +196,18 @@ class Activity
     public function setPlace(?Place $place): static
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getManager(): ?Participant
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?Participant $manager): static
+    {
+        $this->manager = $manager;
 
         return $this;
     }

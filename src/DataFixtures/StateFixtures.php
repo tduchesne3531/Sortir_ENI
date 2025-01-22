@@ -23,10 +23,11 @@ class StateFixtures extends Fixture
             $state = new State();
             $state->setName($stateData['Name']);
 
-            $this->addReference('state_' . $index, $state);
             $manager->persist($state);
+            $this->addReference('state_' . $index, $state);
         }
 
         $manager->flush();
+
     }
 }

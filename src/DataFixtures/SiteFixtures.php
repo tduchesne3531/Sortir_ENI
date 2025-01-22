@@ -20,10 +20,12 @@ class SiteFixtures extends Fixture
             $site = new Site();
             $site->setName($siteData['Name']);
 
-            $this->addReference('site_' . $index, $site);
             $manager->persist($site);
+            $this->addReference('site_' . $index, $site);
+            dd($index);
         }
 
         $manager->flush();
+
     }
 }
