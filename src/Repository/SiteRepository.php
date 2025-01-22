@@ -16,6 +16,13 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
+    public function save(Site $site) : void
+    {
+        $this->getEntityManager()->persist($site);
+        $this->getEntityManager()->flush();
+    }
+    
+
 //    /**
 //     * @return Site[] Returns an array of Site objects
 //     */
