@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Site;
+use App\Form\SiteType;
+use App\Repository\SiteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\SiteService;
@@ -29,10 +33,30 @@ final class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/add', name: 'add', methods: ['GET'])]
-    public function add(): Response
+    #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
+    public function add(
+        Request                $request,
+        EntityManagerInterface $entityManager
+    ): Response
     {
-        return $this->render('site/add_or_edit.html.twig');
+        $site = new Site();
+        $siteForm = $this->createForm(SiteType::class, $site);
+        $siteForm->handleRequest($request);
+
+        if ($siteForm->isSubmitted() && $siteForm->isValid()) {
+            $entityManager->persist($site);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Site créé avec succès');
+
+            return $this->redirectToRoute('site_add');
+        }
+
+        return $this->render('site/add_or_edit.html.twig', [
+            'controller_name' => 'SiteController',
+            'site' => $site,
+            'form' => $siteForm->createView(),
+    ]);
     }
 
     #[Route('/store', name: 'store', methods: ['POST'])]
@@ -57,11 +81,11 @@ final class SiteController extends AbstractController
         return $this->redirectToRoute('site_list');
     }
 
-    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(int $id): Response
-    {
-        $this->siteService()->delete($id);
-        return $this->redirectToRoute('site_list');
-    }
+//    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+//    public function delete(int $id): Response
+//    {
+//        $this->siteService()->delete($id);
+//        return $this->redirectToRoute('site_list');
+//    }
 
 }

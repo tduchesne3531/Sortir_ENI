@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ activity.id ? 'Modifier une sortie' : 'Créer une sortie' }}</h1>
+
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.name) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.dateStartTime) }}
+        {{ form_widget(form.dateStartTime, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.dateStartTime) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.registrationDeadLine) }}
+        {{ form_widget(form.registrationDeadLine, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.registrationDeadLine) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.maxRegistration) }}
+        {{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.maxRegistration) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.duration) }}
+        {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.duration) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="form-group">
+        <label for="places">Lieu</label>
+        <select id="places" name="places" class="form-control">
+            <option value="">-- Choisissez un lieu --</option>
+            {% for place in places %}
+                <option value="{{ place.id }}">{{ place.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button class="btn btn-primary">{{ activity.id ? 'Modifier' : 'Créer' }}</button>
+    {{ form_end(form) }}
+{% endblock %}

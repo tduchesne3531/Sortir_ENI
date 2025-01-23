@@ -64,5 +64,4 @@ class ActivityFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-
 }

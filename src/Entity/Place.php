@@ -43,6 +43,8 @@ class Place
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

@@ -13,7 +13,6 @@ class Participant extends User
 {
     use WhoAndWhenTrait;
 
-
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 

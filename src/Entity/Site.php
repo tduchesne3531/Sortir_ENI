@@ -38,6 +38,8 @@ class Site
     {
         $this->participants = new ArrayCollection();
         $this->sorties = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
