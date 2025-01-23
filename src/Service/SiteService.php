@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Site;
 use App\Repository\SiteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SiteService
 {

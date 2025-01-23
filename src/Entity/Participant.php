@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant extends User
 {
-//    use WhoAndWhenTrait;
+    use WhoAndWhenTrait;
 
 
     #[ORM\Column(length: 255)]

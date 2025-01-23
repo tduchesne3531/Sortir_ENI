@@ -44,6 +44,8 @@ class ActivityFixtures extends Fixture implements DependentFixtureInterface
             $activity->setState($this->getReference('state_' . $activityData['etat'], State::class));
             $activity->setManager($this->getReference('participant_' . $activityData['organisteur'], Participant::class));
             $activity->setPlace($this->getReference('place_' . $activityData['place'], Place::class));
+            $activity->setCreatedAt(new \DateTimeImmutable());
+            $activity->setUpdatedAt(new \DateTime());
 
             $manager->persist($activity);
             $this->addReference('activity_' . $index, $activity);

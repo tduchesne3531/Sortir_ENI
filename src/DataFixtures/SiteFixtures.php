@@ -20,6 +20,8 @@ class SiteFixtures extends Fixture
         foreach ($sitesFix as $index => $siteData) {
             $site = new Site();
             $site->setName($siteData['Name']);
+            $site->setCreatedAt(new \DateTimeImmutable());
+            $site->setUpdatedAt(new \DateTime());
 
             $manager->persist($site);
             $this->addReference('site_' . $index, $site);

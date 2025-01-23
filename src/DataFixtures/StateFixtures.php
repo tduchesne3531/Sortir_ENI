@@ -23,6 +23,8 @@ class StateFixtures extends Fixture
         foreach ($statesFix as $index => $stateData) {
             $state = new State();
             $state->setName($stateData['Name']);
+            $state->setCreatedAt(new \DateTimeImmutable());
+            $state->setUpdatedAt(new \DateTime());
 
             $manager->persist($state);
             $this->addReference('state_' . $index, $state);
