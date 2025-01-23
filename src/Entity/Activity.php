@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Activity
 {
-//    use WhoAndWhenTrait;
+    use WhoAndWhenTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

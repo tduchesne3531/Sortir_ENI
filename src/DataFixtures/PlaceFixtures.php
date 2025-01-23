@@ -32,6 +32,8 @@ class PlaceFixtures extends Fixture implements DependentFixtureInterface
             $place->setLatitude($placeData['latitude']);
             $place->setLongitude($placeData['longitude']);
             $place->setCity($this->getReference('city_' . $placeData['city'], City::class));
+            $place->setCreatedAt(new \DateTimeImmutable());
+            $place->setUpdatedAt(new \DateTime());
 
             $manager->persist($place);
             $this->addReference('place_' . $index, $place);
