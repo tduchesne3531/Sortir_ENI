@@ -23,6 +23,8 @@ class CityFixtures extends Fixture
             $city = new City();
             $city->setName($cityData['Name']);
             $city->setZipCode($cityData['zip']);
+            $city->setCreatedAt(new \DateTimeImmutable());
+            $city->setUpdatedAt(new \DateTime());
 
             $manager->persist($city);
             $this->addReference('city_' . $index, $city);

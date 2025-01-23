@@ -46,6 +46,8 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setPassword($this->passwordHasher->hashPassword($participant, 'root'));
             $participant->setIsActive(true);
             $participant->setSite($this->getReference('site_' . $participantData['site'], Site::class));
+            $participant->setCreatedAt(new \DateTimeImmutable());
+            $participant->setUpdatedAt(new \DateTime());
 
             // Adolphe Thiers - Admin
             if ($index === 0) {

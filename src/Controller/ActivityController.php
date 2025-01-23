@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\Participant;
 use App\Form\ActivityType;
 use App\mapper\ActivityMapper;
 use App\Repository\ParticipantRepository;
@@ -49,17 +50,20 @@ final class ActivityController extends AbstractController
     }
 
 
-    #[Route('/all', name: 'all', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
+    #[Route('/', name: 'list', methods: ['GET'])]
+//    #[IsGranted('ROLE_USER')]
     public function getAll(ActivityMapper $activityMapper): Response
     {
         $user = $this->getUser();
-        $participant = $user
-            ? $this->participantRepository->find(['email' => $user->getUserIdentifier()])
-            : $this->participantRepository->find(['id' => 1]);
+//        $participant = $user
+//            ? $this->participantRepository->find(['email' => $user->getUserIdentifier()])
+//            : $this->participantRepository->find(2);
+        $participant = new Participant();
         $activities = $this->activityService->getAll();
         $sites = $this->siteService->findAllSites();
         $activitiesDto = array_map(fn($activity) => $this->activityMapper->toDto($activity, $participant), $activities);
+
+
 
         return $this->render('activity/activities.html.twig', [
             'controller_name' => 'ActivityController',
