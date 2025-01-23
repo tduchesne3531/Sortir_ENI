@@ -1,9 +1,9 @@
 <nav>
     <ul>
         <li><a href="{{ path('app_home') }}">Accueil</a></li>
-        <li><a href="">Mon profil</a></li>
         <li>
             {% if app.user %}
+                <li><a href="{{ path('participant_detail', { id: app.user.id }) }}">Mon profil</a></li>
                 <a href="{{ path('app_logout') }}">Se déconnecter</a>
             {% else %}
                 <a href="{{ path('app_login') }}">Se connecter</a>

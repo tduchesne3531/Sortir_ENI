@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Site;
 use App\Entity\User;
 use App\Form\ParticipantType;
 use App\Service\ParticipantService;
+use App\Service\SiteService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +19,12 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 final class ParticipantController extends AbstractController
 {
     private participantService $participantService;
+    private siteService $siteService;
 
-    public function __construct(ParticipantService $participantService)
+    public function __construct(ParticipantService $participantService, SiteService $siteService)
     {
         $this->participantService = $participantService;
+        $this->siteService = $siteService;
     }
 
     #[Route('', name: 'list', methods: ['GET'])]
@@ -87,9 +91,16 @@ final class ParticipantController extends AbstractController
                     $participant->setCreatedAt(new \DateTimeImmutable());
                 }
 
-                $this->participantService->storeOrUpdateParticipant($participant);
+                $site = new Site();
+                $site->setName('Rennes');
+                $site->setCreatedAt(new \DateTimeImmutable());
+//                $site->
+                $this->siteService->store($site);
+                $participant->setSite($site);
+
+                $this->participantService->storeOrUpdateParticipant($participant, $site);
                 $this->addFlash('success', 'The participant' . $participant->getFirstname() . 'was successfully created.');
-                return $this->redirectToRoute('detail', ['id' => $participant->getId()]);
+                return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
             }
             // else return the form to add a new participant
             return $this->render('participant/add_or_edit.html.twig', [
@@ -113,7 +124,7 @@ final class ParticipantController extends AbstractController
             $participantForm->handleRequest($request);
 
             if ($participantForm->isSubmitted() && $participantForm->isValid()) {
-                $this->participantService->storeOrUpdateParticipant($participant);
+                $this->participantService->storeOrUpdateParticipant($participant, $site);
                 $this->addFlash('success', 'The participant' . $participant->getFirstname() . 'was successfully edited.');
 
                 return $this->redirectToRoute('detail', ['id' => $participant->getId()]);

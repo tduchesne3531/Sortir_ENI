@@ -48,6 +48,10 @@ class Participant extends User
     {
         $this->sortiesManaged = new ArrayCollection();
         $this->sorties = new ArrayCollection();
+
+        // Initialization created fields by WhoAndWhenTrait
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
 

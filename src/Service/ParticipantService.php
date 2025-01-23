@@ -2,16 +2,21 @@
 namespace App\Service;
 
 use App\Entity\Participant;
+use App\Entity\Site;
 use App\Repository\ParticipantRepository;
+use App\Repository\SiteRepository;
 
 class ParticipantService
 {
     private ParticipantRepository $participantRepository;
+    private SiteRepository $siteRepository;
 
     public function __construct(
-        ParticipantRepository $participantRepository
+        ParticipantRepository $participantRepository,
+        SiteRepository $siteRepository,
     ) {
         $this->participantRepository = $participantRepository;
+        $this->siteRepository = $siteRepository;
     }
 
     public function getAllParticipants(): array
@@ -24,8 +29,9 @@ class ParticipantService
         return $this->participantRepository->find($id);
     }
 
-    public function storeOrUpdateParticipant(Participant $participant): void
+    public function storeOrUpdateParticipant(Participant $participant, Site $site): void
     {
+        $this->siteRepository->save($site);
         $this->participantRepository->save($participant);
     }
 

@@ -1,14 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     {{ form_errors(participantForm) }}
 
     <h1>
         {{ mode == 'edit' ? 'Edit Participant' : (mode == 'add' ? 'Add Participant' : 'My Account') }}
     </h1>
     {{ form_start(participantForm) }}
+
     {{ form_widget(participantForm) }}
     <button class="btn btn-primary">{{ mode == 'edit' ? 'Update' : (mode == 'add' ? 'Create' : 'My Account') }}</button>
     {{ form_end(participantForm) }}
     <a href="{{ path('participant_list') }}" class="btn btn-secondary">Back to list</a>
+
 {% endblock %}
