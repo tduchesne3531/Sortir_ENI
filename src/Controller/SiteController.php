@@ -28,18 +28,20 @@ final class SiteController extends AbstractController
     {
         $sites = $this->siteService->findAllSites();
         return $this->render('site/list.html.twig',
-        [
-            'sites' => $sites
-        ]);
+            [
+                'sites' => $sites
+            ]);
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
-    public function add(
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    public function addOrEdit(
         Request                $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        int $id = null
     ): Response
     {
-        $site = new Site();
+        $site = $id ? $this->siteService->getById($id) : new Site();
         $siteForm = $this->createForm(SiteType::class, $site);
         $siteForm->handleRequest($request);
 
@@ -47,16 +49,16 @@ final class SiteController extends AbstractController
             $entityManager->persist($site);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Site créé avec succès');
+            $this->addFlash('success', 'Site créé/modifié avec succès');
 
-            return $this->redirectToRoute('site_add');
+            return $this->redirectToRoute('site_list');
         }
 
         return $this->render('site/add_or_edit.html.twig', [
             'controller_name' => 'SiteController',
             'site' => $site,
             'form' => $siteForm->createView(),
-    ]);
+        ]);
     }
 
     #[Route('/store', name: 'store', methods: ['POST'])]
@@ -66,26 +68,23 @@ final class SiteController extends AbstractController
         return $this->redirectToRoute('site_list');
     }
 
-    #[Route('/edit/{id}', name: 'edit', methods: ['GET'])]
-    public function edit(int $id): Response
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(Request $request): Response
     {
-        return $this->render('site/add_or_edit.html.twig', [
-            'id' => $id,
+        $word = $request->query->get('search', '');
+        $sites = $this->siteService->getAllByWord($word);
+
+        return $this->render('site/list.html.twig', [
+            'sites' => $sites,
+            'search' => $word,
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
-    public function update(int $id, Site $site): Response
+    #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
+    public function delete(int $id): Response
     {
-        $this->siteService->update($id, $site);
+        $this->siteService->deleteById($id);
         return $this->redirectToRoute('site_list');
     }
-
-//    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
-//    public function delete(int $id): Response
-//    {
-//        $this->siteService()->delete($id);
-//        return $this->redirectToRoute('site_list');
-//    }
 
 }

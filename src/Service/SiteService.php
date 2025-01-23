@@ -27,6 +27,10 @@ class SiteService
         return $this->siteRepository->findAll();
     }
 
+    public function getById(int $idSite): Site {
+        return $this->siteRepository->find($idSite);
+    }
+
     /**
      * Enregistre un nouveau site
      *
@@ -44,9 +48,10 @@ class SiteService
      * @param Site $updatedSite
      * @return void
      */
-    public function update(int $id, Site $site): void
+    public function update(int $id) : void
     {
-        $this->siteRepository->update($site);
+        $site = $this->siteRepository->find($id);
+        $this->siteRepository->save($site);
     }
 
     /**
@@ -55,15 +60,23 @@ class SiteService
      * @param int $id
      * @return void
      */
-    public function delete(int $id): void
+    public function deleteById(int $id): void
     {
         $site = $this->siteRepository->find($id);
-        if (!$site) {
+        if (!$site)
             throw new \RuntimeException("Site with id $id not found.");
-        }
 
         $this->entityManager->remove($site);
         $this->entityManager->flush();
+    }
+
+    public function getAllByWord(string $word): array
+    {
+        return $this->siteRepository->createQueryBuilder('s')
+            ->where('LOWER(s.name) LIKE LOWER(:word)')
+            ->setParameter('word', '%' . strtolower($word) . '%')
+            ->getQuery()
+            ->getResult();
     }
 
 }

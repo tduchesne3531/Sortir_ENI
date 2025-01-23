@@ -4,6 +4,9 @@
     table { width: 100%; border-collapse: collapse; margin-top: 1em; }
     table th, table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     table th { background-color: #f4f4f4; }
+    .action-buttons a { margin-right: 5px; text-decoration: none; color: #007BFF; }
+    .action-buttons a:hover { text-decoration: underline; }
+    .action-buttons .delete { color: #FF0000; }
 </style>
 
 <div>
@@ -11,16 +14,22 @@
         <thead>
         <tr>
             <th>Nom des villes</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for city in cities %}
             <tr>
                 <td>{{ city.name }}</td>
+                <td class="action-buttons">
+                    <a href="{{ path('city_edit', { id: city.id }) }}">Modifier</a>
+{#                    <a href="{{ path('city_delete', { id: city.id }) }}" class="delete"#}
+{#                       onclick="return confirm('Voulez-vous vraiment supprimer cette ville ?');">Supprimer</a>#}
+                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">Aucune ville trouvée.</td>
+                <td colspan="2">Aucune ville trouvée.</td>
             </tr>
         {% endfor %}
         </tbody>
