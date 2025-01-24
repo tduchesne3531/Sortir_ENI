@@ -13,6 +13,7 @@
         <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
         {% if (app.user.isAdmin) %}
             <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
+            <a href="{{ path('participant_edit', {'id': participant.id }) }}">Edit participant</a>
             <a href="{{ path('participant_disable', {'id': participant.id }) }}">{{ participant.isActive ? 'Disable participant' : 'Enable participant'  }}</a>
         {% endif %}
         {#          TODO: implement the participant photo uploading          #}
