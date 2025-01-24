@@ -21,15 +21,17 @@
     <section class="participants-list">
         {% for participant in participants %}
             <article title="{{ participant.firstname }} | {{ participant.lastname }}">
-                <p>{{ participant.pseudo }}</p>
-                <p>{{ participant.email }}</p>
-                <p>{{ participant.phone }}</p>
-                <p>{{ participant.site.name }}</p>
-                <p>{{ participant.isAdmin.toString() }}</p>
-                <a href="{{ path('participant_detail', {'id': participant.id }) }}">
-{#          TODO: implement the participant photo uploading          #}
-{#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
-                </a>
+                <p>Pseudo : {{ participant.pseudo }}</p>
+                <p>Email : {{ participant.email }}</p>
+                <p>Phone : {{ participant.phone }}</p>
+                <p>Site : {{ participant.site.name }}</p>
+                <p>Admin : {{ participant.isAdmin ? 'Yes' : 'No' }}</p>
+                <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
+                <a href="{{ path('participant_detail', {'id': participant.id }) }}">See details</a>
+                <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
+                <a href="{{ path('participant_disable', {'id': participant.id }) }}">Disable participant</a>
+                {#          TODO: implement the participant photo uploading          #}
+                {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
             </article>
         {% endfor %}
     </section>

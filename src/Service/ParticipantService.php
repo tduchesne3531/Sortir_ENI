@@ -2,21 +2,20 @@
 namespace App\Service;
 
 use App\Entity\Participant;
-use App\Entity\Site;
+use App\Entity\User;
 use App\Repository\ParticipantRepository;
-use App\Repository\SiteRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ParticipantService
 {
     private ParticipantRepository $participantRepository;
-    private SiteRepository $siteRepository;
-
+    private UserPasswordHasherInterface $userPasswordHasher;
     public function __construct(
         ParticipantRepository $participantRepository,
-        SiteRepository $siteRepository,
+        UserPasswordHasherInterface $userPasswordHasher
     ) {
         $this->participantRepository = $participantRepository;
-        $this->siteRepository = $siteRepository;
+        $this->userPasswordHasher = $userPasswordHasher;
     }
 
     public function getAllParticipants(): array
@@ -29,9 +28,24 @@ class ParticipantService
         return $this->participantRepository->find($id);
     }
 
-    public function storeOrUpdateParticipant(Participant $participant, Site $site): void
+    public function storeOrUpdateParticipant(
+        Participant $participant,
+        ?string $plainPassword,
+        User $user
+    ): void
     {
-        $this->siteRepository->save($site);
+        if (!empty($plainPassword)) {
+            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, $plainPassword));
+        }
+        if ($participant->isActive() === null) {
+            $participant->setIsActive(true);
+        }
+        if ($participant->getCreatedBy() === null) {
+            $participant->setCreatedBy($user);
+        } else {
+            $participant->setUpdatedBy($user);
+        }
+
         $this->participantRepository->save($participant);
     }
 
@@ -46,4 +60,12 @@ class ParticipantService
         $this->participantRepository->delete($participant);
     }
 
+    public function disableOrEnableParticipant(Participant $participant): void
+    {
+        $participant->isActive() ?
+            $participant->setIsActive(false) :
+            $participant->setIsActive(true);
+
+        $this->participantRepository->save($participant);
+    }
 }

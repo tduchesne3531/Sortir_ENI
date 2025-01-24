@@ -53,8 +53,6 @@ class ParticipantType extends AbstractType
                     'label' => 'Repeat Password',
                 ],
                 'invalid_message' => 'The password fields must match.',
-                // Instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
             ])
             ->add('isAdmin', ChoiceType::class, [
@@ -62,18 +60,10 @@ class ParticipantType extends AbstractType
                     'Yes' => true,
                     'No' => false,
                 ],
-                'expanded' => true, // Render as radio buttons
-                'multiple' => false, // Single choice
+                'expanded' => true,
+                'multiple' => false,
                 'label' => 'Administrator',
             ])
-
-//            ->add('createdAt', null, [
-//                'widget' => 'single_text',
-//            ]) //TODO: done by listener from WhoAndWhenTrait
-//            ->add('updatedAt', null, [
-//                'widget' => 'single_text',
-//            ]) //TODO: same than createdAt
-
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'name',
@@ -84,12 +74,44 @@ class ParticipantType extends AbstractType
 //                'label' => 'Télécharger',
 //            ]) //TODO: later because Photo is not already implemented
         ;
+        if ($options['is_edit_mode'] ?? false) {
+            $builder
+                ->add('plainPassword', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'options' => [
+                        'attr' => [
+                            'autocomplete' => 'new-password',
+                        ],
+                    ],
+                    'first_options' => [
+                        'constraints' => [
+                            new Length([
+                                'min' => 6,
+                                'minMessage' => 'Your password should be at least {{ limit }} characters',
+                                // max length allowed by Symfony for security reasons
+                                'max' => 4096,
+                            ]),
+//                        new PasswordStrength(),
+//                        new NotCompromisedPassword(),
+                        ],
+                        'label' => 'New password',
+                    ],
+                    'second_options' => [
+                        'label' => 'Repeat Password',
+                    ],
+                    'invalid_message' => 'The password fields must match.',
+                    'mapped' => false,
+                    'required' => false,
+                ]
+            );
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,
+            'is_edit_mode' => false, // default value
         ]);
     }
 }
