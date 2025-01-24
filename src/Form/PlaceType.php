@@ -19,6 +19,12 @@ class PlaceType extends AbstractType
             ->add('address')
             ->add('latitude')
             ->add('longitude')
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Sélectionnez une ville',
+                'required' => true,
+            ]);
         ;
     }
 

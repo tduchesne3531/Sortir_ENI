@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Place;
 use App\Form\PlaceType;
+use App\Service\CityService;
 use App\Service\PlaceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/place', name: 'place_')]
 final class PlaceController extends AbstractController
 {
-    public function __construct(private readonly PlaceService $placeService)
+    public function __construct(private readonly PlaceService $placeService, private readonly CityService $cityService)
     {
     }
 
@@ -48,10 +49,12 @@ final class PlaceController extends AbstractController
 
             return $this->redirectToRoute('place_list');
         }
+        $cities = $this->cityService->getAll();
 
         return $this->render('place/add_or_edit.html.twig', [
             'controller_name' => 'PlaceController',
             'place' => $place,
+            'cities' => $cities,
             'form' => $placeForm->createView(),
         ]);
     }

@@ -33,16 +33,21 @@
         <thead>
         <tr>
             <th>Nom des Lieux</th>
+            <th>Ville</th>
+            <th>Code Postal</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for place in places %}
             <tr>
                 <td>{{ place.name }}</td>
+                <td>{{ place.city.name }}</td>
+                <td>{{ place.city.zipCode }}</td>
                 {% if place.activities|length < 1 %}
                     <td class="action-buttons">
-                        <a href="{{ path('site_edit', { id: place.id }) }}">Modifier</a>
-                        <a href="{{ path('site_delete', { id: place.id }) }}" class="delete"
+                        <a href="{{ path('place_edit', { id: place.id }) }}">Modifier</a>
+                        <a href="{{ path('place_delete', { id: place.id }) }}" class="delete"
                            onclick="return confirm('Voulez-vous vraiment supprimer ce lieu ?');">Supprimer</a>
                     </td>
                 {% else %}
