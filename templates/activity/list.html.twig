@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sorties{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Liste des sorties</h1>
+
+    {% if activities is not empty %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for activity in activities %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ activity.name }}</h5>
+                            <p class="card-text">
+                                <strong>Date :</strong> {{ activity.dateStartTime|date('d/m/Y H:i') }}<br>
+                                <strong>Lieu :</strong> {{ activity.place.name }}<br>
+                                <strong>Organisateur :</strong>
+                                {% if activity.manager %}
+                                {{ activity.manager.firstname }} {{ activity.manager.lastname }}
+                            {% else %}
+                                Non défini
+                                {% endif %}<br>
+                                <strong>Participants :</strong>
+                                {{ activity.participants|length }} / {{ activity.maxRegistration }}
+                            </p>
+                            <a href="{{ path('activity_detail', { id: activity.id }) }}" class="btn btn-primary">Détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">Aucune sortie disponible pour le moment.</p>
+    {% endif %}
+{% endblock %}

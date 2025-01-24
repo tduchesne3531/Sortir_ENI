@@ -2,143 +2,206 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Activity;
 use App\Entity\Participant;
+use App\Entity\State;
 use App\Form\ActivityType;
-use App\mapper\ActivityMapper;
-use App\Repository\ParticipantRepository;
-use App\Repository\PlaceRepository;
-use App\Repository\SiteRepository;
-use App\Repository\SortieRepository;
 use App\Service\ActivityService;
-use App\Service\PlaceService;
-use App\Service\SiteService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/activity', name: 'activity_')]
 final class ActivityController extends AbstractController
 {
 
-    private SiteRepository $siteRepository;
     private ActivityService $activityService;
-    private SiteService $siteService;
-    private ParticipantRepository $participantRepository;
-    private ActivityMapper $activityMapper;
-    private PlaceService $placeService;
 
-    /**
-     * @param SiteRepository $siteRepository
-     * @param ActivityService $activityService
-     * @param SiteService $siteService
-     * @param ParticipantRepository $participantRepository
-     * @param ActivityMapper $activityMapper
-     * @param PlaceService $placeService
-     */
-    public function __construct(SiteRepository $siteRepository, ActivityService $activityService, SiteService $siteService, ParticipantRepository $participantRepository, ActivityMapper $activityMapper, PlaceService $placeService)
+    public function __construct(ActivityService $activityService)
     {
-        $this->siteRepository = $siteRepository;
         $this->activityService = $activityService;
-        $this->siteService = $siteService;
-        $this->participantRepository = $participantRepository;
-        $this->activityMapper = $activityMapper;
-        $this->placeService = $placeService;
     }
-
 
     #[Route('/', name: 'list', methods: ['GET'])]
-//    #[IsGranted('ROLE_USER')]
-    public function getAll(ActivityMapper $activityMapper): Response
+    public function list(): Response
     {
-        $user = $this->getUser();
-//        $participant = $user
-//            ? $this->participantRepository->find(['email' => $user->getUserIdentifier()])
-//            : $this->participantRepository->find(2);
-        $participant = new Participant();
-        $activities = $this->activityService->getAll();
-        $sites = $this->siteService->findAllSites();
-        $activitiesDto = array_map(fn($activity) => $this->activityMapper->toDto($activity, $participant), $activities);
-
-
-
-        return $this->render('activity/activities.html.twig', [
-            'controller_name' => 'ActivityController',
-            'activities' => $activitiesDto,
-            'participant' => $participant,
-            'sites' => $sites,
+        $activities = $this->activityService->getAllActivities();
+        return $this->render('activity/list.html.twig', [
+            'activities' => $activities
         ]);
     }
 
-    #[Route('/site/{siteId}', name: 'by_site', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function getAllBySite(int $siteId): Response
+    #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function detail(int $id): Response
     {
-        $site = $this->siteRepository->find($siteId);
-        $activities = $this->activityService->getAllBySite($site);
-        $user = $this->getUser();
-        $sites = $this->siteRepository->findAll();
-
-        return $this->render('activity/activities.html.twig', [
-            'controller_name' => 'ActivityController',
-            'activities' => $activities,
-            'user' => $user,
-            'sites' => $sites,
-        ]);
-    }
-
-    #[Route('/activity/{activityId}', name: 'by_id', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function get(int $activityId): Response
-    {
-        $activity = $this->activityService->get($activityId);
         $user = $this->getUser();
 
-        return $this->render('activity/activity.html.twig', [
-            'controller_name' => 'ActivityController',
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être un participant pour accéder aux détails de cette sortie.');
+        }
+
+        $activity = $this->activityService->findByID($id);
+
+        if (!$activity) {
+            throw $this->createNotFoundException('Cette sortie n\'existe pas.');
+        }
+
+        $isUserRegistered = $activity->getParticipants()->contains($user);
+        $isManager = $activity->getManager() === $user;
+
+        return $this->render('activity/detail.html.twig', [
             'activity' => $activity,
-            'user' => $user
+            'isUserRegistered' => $isUserRegistered,
+            'isManager' => $isManager,
         ]);
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
-    #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function save(
-        Request                $request,
-        EntityManagerInterface $entityManager,
-        SortieRepository       $activityRepository,
-        PlaceRepository        $placeRepository,
-        int                    $id = null
-    ): Response
+    public function add(
+        Request $request,
+        EntityManagerInterface $entityManager): Response
     {
-        $activity = $id ? $activityRepository->find($id) : new Activity();
-        if (!$activity)
-            throw $this->createNotFoundException('activity not found');
-
-        $places = $this->placeService->getAll();
-
+        $activity = new Activity();
         $activityForm = $this->createForm(ActivityType::class, $activity);
         $activityForm->handleRequest($request);
 
         if ($activityForm->isSubmitted() && $activityForm->isValid()) {
-            $placeId = $request->request->get('places');
-            $place = $this->$placeRepository->find($placeId);
-            $activity->setPlace($place);
-
+            $user = $this->getUser();
+            $activity->setCreatedBy($this->getUser());
+            $activity->setManager($user instanceof Participant ? $user : null);
             $entityManager->persist($activity);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Sortie créée avec succès !');
+
+            return $this->redirectToRoute('activity_list');
         }
 
-        return $this->render('activity/activity_form.html.twig', [
-            'controller_name' => 'ActivityController',
-            'places' => $places,
+        return $this->render('activity/addOrEdit.html.twig', [
             'form' => $activityForm->createView(),
-            'activity' => $activity,
+            'activity' => $activity
+            ]);
+    }
+
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $activity = $this->activityService->findByID($id);
+        $activityForm = $this->createForm(ActivityType::class, $activity);
+        $activityForm->handleRequest($request);
+
+        if ($activityForm->isSubmitted() && $activityForm->isValid()) {
+            $activity->setUpdatedBy($this->getUser());
+            $activity->setUpdatedAt(new \DateTime('now'));
+            $entityManager->persist($activity);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Sortie modifiée avec succès !');
+
+            return $this->redirectToRoute('activity_list');
+
+        }
+        return $this->render('activity/addOrEdit.html.twig', [
+            'form' => $activityForm->createView(),
+            'activity' => $activity
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $activity = $this->activityService->findByID($id);
+        $entityManager->remove($activity);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Sortie supprimée avec succès !');
+
+        return $this->redirectToRoute('activity_list');
+    }
+
+    #[Route('/{id}/register', name: 'register', methods: ['POST'])]
+    public function register(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être un participant pour vous inscrire.');
+        }
+
+        $activity = $this->activityService->findByID($id);
+
+        if ($activity->getParticipants()->contains($user)) {
+            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
+        } elseif ($activity->getParticipants()->count() >= $activity->getMaxRegistration()) {
+            $this->addFlash('danger', 'Cette sortie est complète.');
+        } else {
+            $activity->addParticipant($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Inscription réussie !');
+        }
+
+        return $this->redirectToRoute('activity_detail', ['id' => $id]);
+    }
+
+    #[Route('/{id}/unregister', name: 'unregister', methods: ['POST'])]
+    public function unregister(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être un participant pour vous désinscrire.');
+        }
+
+        $activity = $this->activityService->findByID($id);
+
+        if ($activity->getParticipants()->contains($user)) {
+            $activity->removeParticipant($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Vous êtes désinscrit de cette sortie.');
+        } else {
+            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('activity_detail', ['id' => $id]);
+    }
+
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
+    public function cancel(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté en tant que participant pour annuler une sortie.');
+        }
+
+        $activity = $this->activityService->findByID($id);
+
+        if (!$activity) {
+            throw $this->createNotFoundException('Cette sortie n\'existe pas.');
+        }
+
+        // Vérifie que l'utilisateur connecté est le manager de la sortie
+        if ($activity->getManager() !== $user) {
+            throw $this->createAccessDeniedException('Seul le créateur de la sortie peut l\'annuler.');
+        }
+
+        // Met à jour l'état de la sortie
+        $canceledState = $entityManager->getRepository(State::class)->findOneBy(['name' => 'Annulée']);
+        if (!$canceledState) {
+            throw new \LogicException('L\'état "Annulée" est introuvable.');
+        }
+
+        $activity->setState($canceledState);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La sortie a été annulée avec succès.');
+
+        return $this->redirectToRoute('activity_detail', ['id' => $id]);
+    }
+
 
 }
