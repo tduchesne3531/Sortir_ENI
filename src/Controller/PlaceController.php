@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[Route('/place', name: 'place_')]
 final class PlaceController extends AbstractController
@@ -29,6 +30,9 @@ final class PlaceController extends AbstractController
             ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     public function addOrEdit(

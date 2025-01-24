@@ -33,12 +33,14 @@ final class CityController extends AbstractController
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
-    public function add(
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    public function addOrEdit(
         Request                $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        int $id = null
     ): Response
     {
-        $city = new City();
+        $city = $id ? $this->cityService->getById($id) : new City();
         $cityForm = $this->createForm(CityType::class, $city);
         $cityForm->handleRequest($request);
 
@@ -49,7 +51,7 @@ final class CityController extends AbstractController
             $entityManager->persist($city);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Ville créé avec succès');
+            $this->addFlash('success', 'Ville créé/modifié avec succès');
 
             return $this->redirectToRoute('city_list');
         }
@@ -58,22 +60,6 @@ final class CityController extends AbstractController
             'controller_name' => 'CityController',
             'city' => $city,
             'form' => $cityForm->createView(),
-        ]);
-
-    }
-
-    #[Route('/create', name: 'create', methods: ['POST'])]
-    public function create(City $city): Response
-    {
-        $this->cityService->save($city);
-        return $this->redirectToRoute('site_list');
-    }
-
-    #[Route('/edit/{id}', name: 'edit', methods: ['GET'])]
-    public function edit(int $id): Response
-    {
-        return $this->render('city/add_or_edit.html.twig', [
-            'id' => $id,
         ]);
     }
 
@@ -89,14 +75,7 @@ final class CityController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
-    public function update(int $id, City $city): Response
-    {
-        $this->cityService->update($id, $city);
-        return $this->redirectToRoute('site_list');
-    }
-
-    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
     public function delete(int $id): Response
     {
         $this->cityService->deleteById($id);

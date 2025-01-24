@@ -23,6 +23,9 @@
             {{ form_row(form.city, { 'attr': { 'class': 'form-control' } }) }}
         </div>
         <button class="btn btn-primary">{{ place.name ? 'Modifier' : 'Créer' }}</button>
+        <div class="add-button">
+            <a href="{{ path('city_add') }}" class="btn btn-secondary mt-3">Ajouter une ville</a>
+        </div>
         {{ form_end(form) }}
     </div>
 
