@@ -28,6 +28,7 @@
                 <p>Admin : {{ participant.isAdmin ? 'Yes' : 'No' }}</p>
                 <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
                 <a href="{{ path('participant_detail', {'id': participant.id }) }}">See details</a>
+                <a href="{{ path('participant_edit', {'id': participant.id }) }}">Edit participant</a>
                 <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
                 <a href="{{ path('participant_disable', {'id': participant.id }) }}">Disable participant</a>
                 {#          TODO: implement the participant photo uploading          #}
