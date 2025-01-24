@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/city', name: 'city_')]
 final class CityController extends AbstractController
@@ -23,6 +24,7 @@ final class CityController extends AbstractController
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function list(): Response
     {
         $cities = $this->cityService->getAll();
@@ -34,6 +36,7 @@ final class CityController extends AbstractController
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function addOrEdit(
         Request                $request,
         EntityManagerInterface $entityManager,
@@ -64,6 +67,7 @@ final class CityController extends AbstractController
     }
 
     #[Route('/search', name: 'search', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function search(Request $request): Response
     {
         $word = $request->query->get('search', '');
@@ -76,6 +80,7 @@ final class CityController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id): Response
     {
         $this->cityService->deleteById($id);

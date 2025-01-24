@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -45,7 +46,8 @@ class CityService
         $this->entityManager->flush();
     }
 
-    public function deleteById(int $id): void {
+    public function deleteById(int $id): void
+    {
         $city = $this->cityRepository->find($id);
         if (!$city) {
             throw new \RuntimeException("City with id $id not found.");
@@ -75,12 +77,28 @@ class CityService
      */
     public function getCommunesByDepartment(string $departmentCode): array
     {
+        $client = HttpClient::create([
+            'proxy' => '10.35.0.248:8080',
+            'timeout' => 20,
+            'verify_peer' => false,
+            'verify_host' => false,
+        ]);
         $url = sprintf('https://geo.api.gouv.fr/departements/%s/communes', $departmentCode);
-        $response = $this->httpClient->request('GET', $url);
+        $response = $client->request('GET', $url);
 
         if ($response->getStatusCode() !== 200)
             throw new \Exception('Erreur lors de la récupération des communes.');
 
-        return $response->toArray();
+        $communes = $response->toArray();
+        $result = [];
+        foreach ($communes as $commune) {
+            $result[] = [
+                'nom' => $commune['nom'],
+                'code_postal' => $commune['codesPostaux'][0]
+            ];
+        }
+
+        return $result;
     }
+
 }

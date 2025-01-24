@@ -25,7 +25,6 @@ class PlaceType extends AbstractType
                 'placeholder' => 'Sélectionnez une ville',
                 'required' => true,
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
