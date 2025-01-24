@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ participant.firstName }} | {{ participant.lastName }} profile</h1>
+
+    <article title="{{ participant.firstname }} | {{ participant.lastname }}">
+        <p>Pseudo : {{ participant.pseudo }}</p>
+        <p>Email : {{ participant.email }}</p>
+        <p>Phone : {{ participant.phone }}</p>
+        <p>Site : {{ participant.site.name }}</p>
+        <p>Admin : {{ participant.isAdmin ? 'Yes' : 'No' }}</p>
+        <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
+        {% if (app.user.isAdmin) %}
+            <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
+            <a href="{{ path('participant_disable', {'id': participant.id }) }}">{{ participant.isActive ? 'Disable participant' : 'Enable participant'  }}</a>
+        {% endif %}
+        {#          TODO: implement the participant photo uploading          #}
+        {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
+    </article>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>List of all participants !</h1>
+
+{#  TODO: pagination  #}
+{#    <div class="flex_div flex_between">#}
+{#        {% if currentPage > 1 %}#}
+{#            <a href="{{ path('participant_list', {'page': currentPage - 1}) }}">#}
+{#                <button>Previous page</button>#}
+{#            </a>#}
+{#        {% else %}#}
+{#            <div></div>#}
+{#        {% endif %}#}
+{#        {% if currentPage < maxPage %}#}
+{#            <a href="{{ path('participant_list', {'page': currentPage + 1}) }}">#}
+{#                <button>Next page</button>#}
+{#            </a>#}
+{#        {% endif %}#}
+{#    </div>#}
+    <section class="participants-list">
+        {% for participant in participants %}
+            <article title="{{ participant.firstname }} | {{ participant.lastname }}">
+                <p>Pseudo : {{ participant.pseudo }}</p>
+                <p>Email : {{ participant.email }}</p>
+                <p>Phone : {{ participant.phone }}</p>
+                <p>Site : {{ participant.site.name }}</p>
+                <p>Admin : {{ participant.isAdmin ? 'Yes' : 'No' }}</p>
+                <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
+                <a href="{{ path('participant_detail', {'id': participant.id }) }}">See details</a>
+                <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
+                <a href="{{ path('participant_disable', {'id': participant.id }) }}">Disable participant</a>
+                {#          TODO: implement the participant photo uploading          #}
+                {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['pseudo'], message: 'This pseudo is already in use')]
 #[ORM\Table(name: 'user')]
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
@@ -20,10 +21,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+//    TODO : NULLABLE UN ID ??? :'(
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    private string $email;
 
     /**
      * @var list<string> The user roles
@@ -35,13 +37,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column(length: 50)]
+//    TODO: nullable ??
     private ?string $pseudo = null;
 
     #[ORM\Column]
-    private ?bool $isAdmin = null;
+    private bool $isAdmin;
 
     public function getId(): ?int
     {
@@ -78,6 +81,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+
+        if ($this->isAdmin) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 

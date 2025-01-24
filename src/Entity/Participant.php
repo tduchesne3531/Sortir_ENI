@@ -13,6 +13,7 @@ class Participant extends User
 {
     use WhoAndWhenTrait;
 
+
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
@@ -53,7 +54,10 @@ class Participant extends User
     {
         $this->sortiesManaged = new ArrayCollection();
         $this->sorties = new ArrayCollection();
-        $this->activities = new ArrayCollection();
+
+        // Initialization created fields by WhoAndWhenTrait
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
 
