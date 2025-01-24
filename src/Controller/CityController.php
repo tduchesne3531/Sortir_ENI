@@ -51,7 +51,7 @@ final class CityController extends AbstractController
 
             $this->addFlash('success', 'Ville créé avec succès');
 
-            return $this->redirectToRoute('city_add');
+            return $this->redirectToRoute('city_list');
         }
 
         return $this->render('city/add_or_edit.html.twig', [
@@ -61,4 +61,47 @@ final class CityController extends AbstractController
         ]);
 
     }
+
+    #[Route('/create', name: 'create', methods: ['POST'])]
+    public function create(City $city): Response
+    {
+        $this->cityService->save($city);
+        return $this->redirectToRoute('site_list');
+    }
+
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET'])]
+    public function edit(int $id): Response
+    {
+        return $this->render('city/add_or_edit.html.twig', [
+            'id' => $id,
+        ]);
+    }
+
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(Request $request): Response
+    {
+        $word = $request->query->get('search', '');
+        $cities = $this->cityService->getAllByWord($word);
+
+        return $this->render('city/list.html.twig', [
+            'cities' => $cities,
+            'search' => $word,
+        ]);
+    }
+
+    #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
+    public function update(int $id, City $city): Response
+    {
+        $this->cityService->update($id, $city);
+        return $this->redirectToRoute('site_list');
+    }
+
+    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(int $id): Response
+    {
+        $this->cityService->deleteById($id);
+        return $this->redirectToRoute('site_list');
+    }
+
+
 }

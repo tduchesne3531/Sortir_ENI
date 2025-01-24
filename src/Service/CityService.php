@@ -3,29 +3,64 @@
 namespace App\Service;
 
 use App\Repository\CityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CityService {
+class CityService
+{
 
     private CityRepository $cityRepository;
     private HttpClientInterface $httpClient;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(CityRepository $cityRepository, HttpClientInterface $httpClient) {
+    /**
+     * @param CityRepository $cityRepository
+     * @param HttpClientInterface $httpClient
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(CityRepository $cityRepository, HttpClientInterface $httpClient, EntityManagerInterface $entityManager)
+    {
         $this->cityRepository = $cityRepository;
         $this->httpClient = $httpClient;
+        $this->entityManager = $entityManager;
     }
 
-    public function getAll() {
+
+    public function getAll()
+    {
         return $this->cityRepository->findAll();
     }
 
-    public function getById($id) {
+    public function getById($id)
+    {
         return $this->cityRepository->find($id);
     }
 
-    public function save($city) : void {
+    public function save($city): void
+    {
         $this->cityRepository->save($city);
+        $this->entityManager->remove($city);
+        $this->entityManager->flush();
+    }
+
+    public function deleteById(int $id): void {
+        $city = $this->cityRepository->find($id);
+        if (!$city) {
+            throw new \RuntimeException("City with id $id not found.");
+        }
+
+        $this->entityManager->remove($city);
+        $this->entityManager->flush();
+    }
+
+    public function getAllByWord(string $word): array
+    {
+        return $this->cityRepository->createQueryBuilder('s')
+            ->where('LOWER(s.name) LIKE LOWER(:word)')
+            ->setParameter('word', '%' . strtolower($word) . '%')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
