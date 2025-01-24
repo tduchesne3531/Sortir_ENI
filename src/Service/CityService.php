@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -70,6 +71,7 @@ class CityService
      * @return array Liste des communes (décodées en tableau PHP)
      * @throws TransportExceptionInterface
      * @throws \Exception
+     * @throws DecodingExceptionInterface
      */
     public function getCommunesByDepartment(string $departmentCode): array
     {
