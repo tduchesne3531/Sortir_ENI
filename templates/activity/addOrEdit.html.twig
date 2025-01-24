@@ -3,7 +3,18 @@
 {% block body %}
     <h1>{{ activity.id ? 'Modifier une sortie' : 'Créer une sortie' }}</h1>
 
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in form.vars.errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {{ form_start(form) }}
+
     <div class="form-group">
         {{ form_label(form.name) }}
         {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
@@ -23,15 +34,15 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.maxRegistration) }}
-        {{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.maxRegistration) }}
-    </div>
-
-    <div class="form-group">
         {{ form_label(form.duration) }}
         {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
         {{ form_errors(form.duration) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.maxRegistration) }}
+        {{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.maxRegistration) }}
     </div>
 
     <div class="form-group">
@@ -41,15 +52,25 @@
     </div>
 
     <div class="form-group">
-        <label for="places">Lieu</label>
-        <select id="places" name="places" class="form-control">
-            <option value="">-- Choisissez un lieu --</option>
-            {% for place in places %}
-                <option value="{{ place.id }}">{{ place.name }}</option>
-            {% endfor %}
-        </select>
+        {{ form_label(form.site) }}
+        {{ form_widget(form.site, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.site) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.place) }}
+        {{ form_widget(form.place, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.place) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.state) }}
+        {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.state) }}
     </div>
 
     <button class="btn btn-primary">{{ activity.id ? 'Modifier' : 'Créer' }}</button>
+    <a href="{{ path('activity_list') }}" class="btn btn-secondary">Annuler</a>
+
     {{ form_end(form) }}
 {% endblock %}

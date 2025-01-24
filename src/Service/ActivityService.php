@@ -6,25 +6,26 @@ use App\Controller\ActivityController;
 use App\Entity\Activity;
 use App\Entity\Site;
 use App\Repository\SiteRepository;
-use App\Repository\SortieRepository;
+use App\Repository\ActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ActivityService
 {
 
-    public function __construct(private readonly SortieRepository $sortieRepository) {
+    public function __construct(private readonly ActivityRepository $sortieRepository) {
 
     }
 
-    public function getAll() : array {
+    public function getAllActivities() : array {
         return $this->sortieRepository->findAll();
     }
 
-    public function getAllBySite(Site $site) : array {
-        return $this->sortieRepository->findBy(['site' => $site], ['date' => 'DESC']);
-    }
+//    public function getAllBySite(Site $site) : array {
+//        return $this->sortieRepository->findBy(['site' => $site], ['date' => 'DESC']);
+//    }
 
-    public function get(int $id) : array | null {
+    public function findById(int $id)
+    {
         return $this->sortieRepository->find($id);
     }
 

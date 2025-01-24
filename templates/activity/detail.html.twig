@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de la sortie{% endblock %}
+
+{% block body %}
+    <h1>{{ activity.name }}</h1>
+
+    <ul>
+        <li><strong>Date :</strong> {{ activity.dateStartTime|date('d/m/Y H:i') }}</li>
+        <li><strong>Lieu :</strong> {{ activity.place.name }}</li>
+        <li><strong>Organisateur :</strong>
+            {% if activity.manager %}
+                {{ activity.manager.firstname }} {{ activity.manager.lastname }}
+            {% else %}
+                Non défini
+            {% endif %}
+        </li>
+        <li><strong>Description :</strong> {{ activity.description }}</li>
+        <li><strong>Participants :</strong> {{ activity.participants|length }} / {{ activity.maxRegistration }}</li>
+        <li><strong>État :</strong> {{ activity.state.name }}</li>
+    </ul>
+
+    <h2>Participants inscrits</h2>
+    {% if activity.participants|length > 0 %}
+        <ul>
+            {% for participant in activity.participants %}
+                <li>{{ participant.firstname }} {{ participant.lastname }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun participant inscrit.</p>
+    {% endif %}
+
+    <div class="actions">
+        {% if isUserRegistered %}
+            <form action="{{ path('activity_unregister', { id: activity.id }) }}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Se désinscrire</button>
+            </form>
+        {% elseif activity.state.name == 'Ouverte' %}
+            <form action="{{ path('activity_register', { id: activity.id }) }}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-success">S'inscrire</button>
+            </form>
+        {% endif %}
+
+        {% if isManager %}
+            <a href="{{ path('activity_edit', { id: activity.id }) }}" class="btn btn-warning">Modifier</a>
+            <form action="{{ path('activity_cancel', { id: activity.id }) }}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Annuler</button>
+            </form>
+        {% endif %}
+
+    </div>
+{% endblock %}
