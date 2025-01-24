@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>List of all participants !</h1>
+    <h1 class="text-center text-3xl font-bold text-cyan-600 mb-8">List of all participants!</h1>
 
 {#  TODO: pagination  #}
 {#    <div class="flex_div flex_between">#}
@@ -18,22 +18,43 @@
 {#            </a>#}
 {#        {% endif %}#}
 {#    </div>#}
-    <section class="participants-list">
+    <section class="participants-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
         {% for participant in participants %}
-            <article title="{{ participant.firstname }} | {{ participant.lastname }}">
-                <p>Pseudo : {{ participant.pseudo }}</p>
-                <p>Email : {{ participant.email }}</p>
-                <p>Phone : {{ participant.phone }}</p>
-                <p>Site : {{ participant.site.name }}</p>
-                <p>Admin : {{ participant.isAdmin ? 'Yes' : 'No' }}</p>
-                <p>Active : {{ participant.isActive ? 'Yes' : 'No' }}</p>
-                <a href="{{ path('participant_detail', {'id': participant.id }) }}">See details</a>
-                <a href="{{ path('participant_edit', {'id': participant.id }) }}">Edit participant</a>
-                <a href="{{ path('participant_delete', {'id': participant.id }) }}">Delete participant</a>
-                <a href="{{ path('participant_disable', {'id': participant.id }) }}">Disable participant</a>
-                {#          TODO: implement the participant photo uploading          #}
-                {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
-            </article>
+            <article class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg">
+                <h2 class="text-lg font-bold text-gray-800 mb-2" title="{{ participant.firstname }} | {{ participant.lastname }}">
+                    {{ participant.firstname }} {{ participant.lastname }}
+                </h2>
+                <ul class="text-gray-600 mb-4">
+                    <li><span class="font-semibold">Pseudo:</span> {{ participant.pseudo }}</li>
+                    <li><span class="font-semibold">Email:</span> {{ participant.email }}</li>
+                    <li><span class="font-semibold">Phone:</span> {{ participant.phone }}</li>
+                    <li><span class="font-semibold">Site:</span> {{ participant.site.name }}</li>
+                    <li><span class="font-semibold">Admin:</span> {{ participant.isAdmin ? 'Yes' : 'No' }}</li>
+                    <li><span class="font-semibold">Active:</span> {{ participant.isActive ? 'Yes' : 'No' }}</li>
+                </ul>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ path('participant_detail', {'id': participant.id }) }}"
+                       class="bg-cyan-600 text-white px-4 py-2 rounded shadow hover:bg-cyan-700 transition">
+                        See details
+                    </a>
+                    <a href="{{ path('participant_edit', {'id': participant.id }) }}"
+                       class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition">
+                        Edit participant
+                    </a>
+                    <a href="{{ path('participant_delete', {'id': participant.id }) }}"
+                       class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">
+                        Delete participant
+                    </a>
+                    <a href="{{ path('participant_disable', {'id': participant.id }) }}"
+                       class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition">
+                        Disable participant
+                    </a>
+
+                    {#          TODO: implement the participant photo uploading          #}
+                    {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
+
+                </div>
+                </article>
         {% endfor %}
     </section>
 {% endblock %}
