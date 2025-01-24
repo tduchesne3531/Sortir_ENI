@@ -27,7 +27,7 @@ class City
     /**
      * @var Collection<int, Place>
      */
-    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city')]
+    #[ORM\OneToMany(targetEntity: Place::class, mappedBy: 'city', cascade: ['persist'])]
     private Collection $places;
 
 

@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ site.name ? 'Modifier' : 'Créer' }} un site{% endblock %}
+{% block title %}{{ city.name ? 'Modifier' : 'Créer' }} une ville{% endblock %}
 
 {% block body %}
     <div class="form-container">
-        <h1>{{ site.name ? 'Modifier' : 'Créer' }} un site</h1>
+        <h1>{{ city.name ? 'Modifier' : 'Créer' }} une ville</h1>
 
         {{ form_start(form, { 'attr': { 'class': 'custom-form' } }) }}
         <div class="form-group">
             {{ form_row(form.name, { 'attr': { 'class': 'form-control' } }) }}
         </div>
-        <button class="btn btn-primary">{{ site.name ? 'Modifier' : 'Créer' }}</button>
+        <div class="form-group">
+            {{ form_row(form.zipCode, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+
+        <button class="btn btn-primary">{{ city.name ? 'Modifier' : 'Créer' }}</button>
         {{ form_end(form) }}
     </div>
 

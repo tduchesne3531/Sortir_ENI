@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Site;
+use App\Form\SiteType;
+use App\Repository\SiteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\SiteService;
@@ -24,15 +28,37 @@ final class SiteController extends AbstractController
     {
         $sites = $this->siteService->findAllSites();
         return $this->render('site/list.html.twig',
-        [
-            'sites' => $sites
-        ]);
+            [
+                'sites' => $sites
+            ]);
     }
 
-    #[Route('/add', name: 'add', methods: ['GET'])]
-    public function add(): Response
+    #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    public function addOrEdit(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        int $id = null
+    ): Response
     {
-        return $this->render('site/add_or_edit.html.twig');
+        $site = $id ? $this->siteService->getById($id) : new Site();
+        $siteForm = $this->createForm(SiteType::class, $site);
+        $siteForm->handleRequest($request);
+
+        if ($siteForm->isSubmitted() && $siteForm->isValid()) {
+            $entityManager->persist($site);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Site créé/modifié avec succès');
+
+            return $this->redirectToRoute('site_list');
+        }
+
+        return $this->render('site/add_or_edit.html.twig', [
+            'controller_name' => 'SiteController',
+            'site' => $site,
+            'form' => $siteForm->createView(),
+        ]);
     }
 
     #[Route('/store', name: 'store', methods: ['POST'])]
@@ -42,25 +68,22 @@ final class SiteController extends AbstractController
         return $this->redirectToRoute('site_list');
     }
 
-    #[Route('/edit/{id}', name: 'edit', methods: ['GET'])]
-    public function edit(int $id): Response
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(Request $request): Response
     {
-        return $this->render('site/add_or_edit.html.twig', [
-            'id' => $id,
+        $word = $request->query->get('search', '');
+        $sites = $this->siteService->getAllByWord($word);
+
+        return $this->render('site/list.html.twig', [
+            'sites' => $sites,
+            'search' => $word,
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
-    public function update(int $id, Site $site): Response
-    {
-        $this->siteService->update($id, $site);
-        return $this->redirectToRoute('site_list');
-    }
-
-    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
     public function delete(int $id): Response
     {
-        $this->siteService()->delete($id);
+        $this->siteService->deleteById($id);
         return $this->redirectToRoute('site_list');
     }
 

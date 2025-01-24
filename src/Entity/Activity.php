@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use App\Entity\Traits\WhoAndWhenTrait;
-use App\Repository\SortieRepository;
+use App\Repository\ActivityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SortieRepository::class)]
+#[ORM\Entity(repositoryClass: ActivityRepository::class)]
 class Activity
 {
     use WhoAndWhenTrait;
@@ -51,10 +51,18 @@ class Activity
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
     private Collection $participants;
 
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Place $place = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Participant $manager = null;
+
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -178,6 +186,30 @@ class Activity
     public function removeParticipant(Participant $participant): static
     {
         $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): static
+    {
+        $this->place = $place;
+
+        return $this;
+    }
+
+    public function getManager(): ?Participant
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?Participant $manager): static
+    {
+        $this->manager = $manager;
 
         return $this;
     }

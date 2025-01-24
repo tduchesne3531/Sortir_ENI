@@ -30,6 +30,8 @@ class State
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
