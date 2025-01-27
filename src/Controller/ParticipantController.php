@@ -69,7 +69,6 @@ final class ParticipantController extends AbstractController
                 ? ['ROLE_ADMIN']
                 : ['ROLE_USER']);
 
-            $this->participantService->storeOrUpdateParticipant($participant, $plainPassword, $user);
             /** @var UploadedFile|null $uploadedFile */
             $uploadedFile = $participantForm->get('photo')->getData();
 
