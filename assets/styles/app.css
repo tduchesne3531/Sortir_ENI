@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 header {
     display: flex;
     align-items: center; /* Aligne verticalement les éléments */
@@ -100,4 +101,17 @@ footer p {
 .btn-primary:hover {
     background-color: #0056b3;
 }
+=======
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+html,
+body {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+>>>>>>> Stashed changes
+
+	@apply h-full w-full p-0 m-0 flex flex-col items-center;
+}
