@@ -35,7 +35,8 @@ final class ParticipantController extends AbstractController
     }
 
     #[Route('detail/{id}', name: 'detail', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function detail(int $id, Participant $participant, #[CurrentUser] ?User $user): Response{
+    public function detail(int $id, Participant $participant, #[CurrentUser] ?User $user): Response
+    {
 //        $mode = 'read';
 
         if ($user) {
@@ -50,7 +51,8 @@ final class ParticipantController extends AbstractController
     #[Route('add', name: 'add', methods: ['GET', 'POST'])]
 //    TODO: make a single route for both add and edit ?
 //    #[Route('edit/{id}', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function addParticipant(Request $request): Response {
+    public function addParticipant(Request $request): Response
+    {
         $mode = 'add';
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -64,9 +66,12 @@ final class ParticipantController extends AbstractController
 
             $user = $this->getUser();
 
+            $participant->setRoles(($participantForm->has('isAdmin') && $participantForm->get('isAdmin')->getData())
+                ? ['ROLE_ADMIN']
+                : ['ROLE_USER']);
+
             $this->participantService->storeOrUpdateParticipant($participant, $plainPassword, $user);
             $this->addFlash('success', 'The participant' . $participant->getFirstname() . 'was successfully created.');
-
 
             return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
         }
