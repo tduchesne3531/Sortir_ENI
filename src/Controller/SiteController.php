@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\SiteService;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/site', name: 'site_')]
@@ -24,6 +25,7 @@ final class SiteController extends AbstractController
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function list(): Response
     {
         $sites = $this->siteService->findAllSites();
@@ -35,6 +37,7 @@ final class SiteController extends AbstractController
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function addOrEdit(
         Request                $request,
         EntityManagerInterface $entityManager,
@@ -62,6 +65,7 @@ final class SiteController extends AbstractController
     }
 
     #[Route('/store', name: 'store', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function store(Site $site): Response
     {
         $this->siteService->store($site);
@@ -69,6 +73,7 @@ final class SiteController extends AbstractController
     }
 
     #[Route('/search', name: 'search', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function search(Request $request): Response
     {
         $word = $request->query->get('search', '');
@@ -81,6 +86,7 @@ final class SiteController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id): Response
     {
         $this->siteService->deleteById($id);

@@ -11,16 +11,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[Route('/place', name: 'place_')]
 final class PlaceController extends AbstractController
 {
-    public function __construct(private readonly PlaceService $placeService, private readonly CityService $cityService)
+
+    private PlaceService $placeService;
+    private CityService $cityService;
+
+    /**
+     * @param PlaceService $placeService
+     * @param CityService $cityService
+     */
+    public function __construct(PlaceService $placeService, CityService $cityService)
     {
+        $this->placeService = $placeService;
+        $this->cityService = $cityService;
     }
 
+
     #[Route('/', name: 'list')]
+    #[IsGranted('ROLE_ADMIN')]
     public function list(): Response
     {
         $places = $this->placeService->getAll();
@@ -35,6 +48,7 @@ final class PlaceController extends AbstractController
      */
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function addOrEdit(
         Request                $request,
         EntityManagerInterface $entityManager,
@@ -46,6 +60,8 @@ final class PlaceController extends AbstractController
         $placeForm->handleRequest($request);
 
         if ($placeForm->isSubmitted() && $placeForm->isValid()) {
+            dd($placeForm->getData());
+
             $entityManager->persist($place);
             $entityManager->flush();
 
@@ -53,7 +69,7 @@ final class PlaceController extends AbstractController
 
             return $this->redirectToRoute('place_list');
         }
-        $cities = $this->cityService->getAll();
+        $cities = $this->cityService->getCommunesByDepartment('35');
 
         return $this->render('place/add_or_edit.html.twig', [
             'controller_name' => 'PlaceController',
@@ -64,6 +80,7 @@ final class PlaceController extends AbstractController
     }
 
     #[Route('/search', name: 'search', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function search(Request $request): Response
     {
         $word = $request->query->get('search', '');
@@ -76,6 +93,7 @@ final class PlaceController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id): Response
     {
         $this->placeService->deleteById($id);
