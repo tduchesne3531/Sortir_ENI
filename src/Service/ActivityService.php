@@ -20,20 +20,12 @@ class ActivityService
         return $this->sortieRepository->findAll();
     }
 
-//    public function getAllBySite(Site $site) : array {
-//        return $this->sortieRepository->findBy(['site' => $site], ['date' => 'DESC']);
-//    }
-
-    public function findById(int $id)
+    public function getAllArchive(bool $isArchive): array
     {
-        return $this->sortieRepository->find($id);
+        return $this->sortieRepository->findAllIsArchive($isArchive);
     }
 
     public function create(Activity $activity): void  {
-        $this->sortieRepository->save($activity);
-    }
-
-    public function update(Activity $activity): void {
         $this->sortieRepository->save($activity);
     }
 

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Activity>
@@ -26,6 +27,23 @@ class ActivityRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($activity);
         $this->getEntityManager()->flush();
+    }
+
+    public function findAllIsArchive(bool $isArchive) : array {
+        $dateArchive = (new \DateTime())->modify('-1 month');
+
+        $queryBuilder = $this->sortieRepository->createQueryBuilder('s');
+
+        if ($isArchive)
+            $queryBuilder->where('s.registrationDeadLine <= :dateArchive');
+        else
+            $queryBuilder->where('s.registrationDeadLine > :dateArchive');
+
+        return $queryBuilder
+            ->setParameter('dateArchive', $dateArchive)
+            ->orderBy('s.date', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
 }
