@@ -1,3 +1,7 @@
+.material-symbols-rounded {
+    font-size: 3rem !important; /* Taille par défaut */
+}
+
 header {
     display: flex;
     align-items: center; /* Aligne verticalement les éléments */
