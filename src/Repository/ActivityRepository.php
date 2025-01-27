@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Activity>
@@ -16,16 +17,15 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
-    public function save(Activity $activity) : void
+    public function findAllIsArchive(bool $isArchive): array
     {
-        $this->getEntityManager()->persist($activity);
-        $this->getEntityManager()->flush();
-    }
-
-    public function delete(Activity $activity) : void
-    {
-        $this->getEntityManager()->remove($activity);
-        $this->getEntityManager()->flush();
+        return $this->createQueryBuilder('s')
+            ->setParameter('dateArchive', (new \DateTime())->modify('-1 month'))
+            ->orderBy('s.registrationDeadLine', 'DESC')
+            ->where($isArchive
+                ? 's.registrationDeadLine <= :dateArchive'
+                : 's.registrationDeadLine > :dateArchive')
+            ->getQuery()->getResult();
     }
 
 }

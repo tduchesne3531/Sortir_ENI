@@ -60,8 +60,6 @@ final class PlaceController extends AbstractController
         $placeForm->handleRequest($request);
 
         if ($placeForm->isSubmitted() && $placeForm->isValid()) {
-            dd($placeForm->getData());
-
             $entityManager->persist($place);
             $entityManager->flush();
 
@@ -69,7 +67,7 @@ final class PlaceController extends AbstractController
 
             return $this->redirectToRoute('place_list');
         }
-        $cities = $this->cityService->getCommunesByDepartment('35');
+        $cities = $this->cityService->getAll();
 
         return $this->render('place/add_or_edit.html.twig', [
             'controller_name' => 'PlaceController',
