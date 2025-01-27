@@ -16,8 +16,11 @@
             <a href="{{ path('participant_edit', {'id': participant.id }) }}">Edit participant</a>
             <a href="{{ path('participant_disable', {'id': participant.id }) }}">{{ participant.isActive ? 'Disable participant' : 'Enable participant'  }}</a>
         {% endif %}
-        {#          TODO: implement the participant photo uploading          #}
-        {#                    <img src="{{ asset('images/profile/participants/' ~ participant.photo) }}" alt="{{ serie.name }}">#}
+        {% if participant.photo %}
+            <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 rounded-full">
+        {% else %}
+            <p>No profile picture uploaded.</p>
+        {% endif %}
     </article>
 
 {% endblock %}

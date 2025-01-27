@@ -8,11 +8,13 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -69,10 +71,24 @@ class ParticipantType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Site de rattachement',
             ])
-//            ->add('photo', FileType::class, [
-//                'class' => Photo::class,
-//                'label' => 'Télécharger',
-//            ]) //TODO: later because Photo is not already implemented
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/jpg',
+                            'image/png',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image (JPEG, JPG, PNG, GIF).',
+                        'maxSizeMessage' => 'Max file size 5 MB',
+                    ]),
+                ],
+                'label' => 'Photo de profil',
+                'required' => false,
+            ])
         ;
         if ($options['is_edit_mode'] ?? false) {
             $builder
@@ -111,7 +127,7 @@ class ParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,
-            'is_edit_mode' => false, // default value
+            'is_edit_mode' => false,
         ]);
     }
 }
