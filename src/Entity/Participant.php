@@ -49,6 +49,8 @@ class Participant extends User
     #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'manager')]
     private Collection $activities;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
 
     public function __construct()
     {
@@ -160,6 +162,17 @@ class Participant extends User
             }
         }
 
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
         return $this;
     }
 
