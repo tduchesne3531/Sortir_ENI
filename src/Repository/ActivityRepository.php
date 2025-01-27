@@ -22,7 +22,7 @@ class ActivityRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->setParameter('dateArchive', (new \DateTime())->modify('-1 month'))
             ->orderBy('s.registrationDeadLine', 'DESC')
-            ->where($isArchive
+            ->where(!$isArchive
                 ? 's.registrationDeadLine <= :dateArchive'
                 : 's.registrationDeadLine > :dateArchive')
             ->getQuery()->getResult();
