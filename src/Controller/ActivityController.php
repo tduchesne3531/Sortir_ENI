@@ -8,6 +8,7 @@ use App\Entity\Participant;
 use App\Entity\State;
 use App\Form\ActivityType;
 use App\Service\ActivityService;
+use App\Service\SiteService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,18 +21,24 @@ final class ActivityController extends AbstractController
 {
 
     private ActivityService $activityService;
+    private SiteService $siteService;
 
-    public function __construct(ActivityService $activityService)
+    public function __construct(ActivityService $activityService, SiteService $siteService)
     {
         $this->activityService = $activityService;
+        $this->siteService = $siteService;
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
     public function list(): Response
     {
         $activities = $this->activityService->getAllActivities();
+
+        $sites = $this->siteService->findAllSites();
+
         return $this->render('activity/list.html.twig', [
-            'activities' => $activities
+            'activities' => $activities,
+            'sites' => $sites
         ]);
     }
 
@@ -114,7 +121,7 @@ final class ActivityController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->findById($id);
         $entityManager->remove($activity);
         $entityManager->flush();
 

@@ -45,7 +45,7 @@ final class ParticipantController extends AbstractController
 //                'mode' => $mode,
             ]);
         }
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('add', name: 'add', methods: ['GET', 'POST'])]
@@ -113,7 +113,7 @@ final class ParticipantController extends AbstractController
                 'participantForm' => $participantForm,
             ]);
         }
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET'])]
