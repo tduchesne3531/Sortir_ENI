@@ -16,20 +16,14 @@ class ActivityService
 
     }
 
-    public function getAllActivities() : array {
-        return $this->sortieRepository->findAll();
-    }
+        public function findById(int $id)
+        {
+            return $this->sortieRepository->find($id);
+        }
 
     public function getAllArchive(bool $isArchive): array
     {
         return $this->sortieRepository->findAllIsArchive($isArchive);
     }
 
-    public function create(Activity $activity): void  {
-        $this->sortieRepository->save($activity);
-    }
-
-    public function delete(Activity $activity): void {
-        $this->sortieRepository->delete($activity);
-    }
 }

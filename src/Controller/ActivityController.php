@@ -32,7 +32,7 @@ final class ActivityController extends AbstractController
     #[Route('/', name: 'list', methods: ['GET'])]
     public function list(): Response
     {
-        $activities = $this->activityService->getAllActivities();
+        $activities = $this->activityService->getAllArchive(true);
 
         $sites = $this->siteService->findAllSites();
 
@@ -51,7 +51,7 @@ final class ActivityController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être un participant pour accéder aux détails de cette sortie.');
         }
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->findById($id);
 
         if (!$activity) {
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
@@ -104,7 +104,6 @@ final class ActivityController extends AbstractController
         if ($activityForm->isSubmitted() && $activityForm->isValid()) {
             $activity->setUpdatedBy($this->getUser());
             $activity->setUpdatedAt(new \DateTime('now'));
-            $entityManager->persist($activity);
             $entityManager->flush();
 
             $this->addFlash('success', 'Sortie modifiée avec succès !');
@@ -119,7 +118,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
         $activity = $this->activityService->findById($id);
         $entityManager->remove($activity);
