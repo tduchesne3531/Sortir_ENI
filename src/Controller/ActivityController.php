@@ -5,8 +5,10 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Entity\Participant;
+use App\Entity\Place;
 use App\Entity\State;
 use App\Form\ActivityType;
+use App\Form\PlaceType;
 use App\Service\ActivityService;
 use App\Service\SiteService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -90,9 +92,13 @@ final class ActivityController extends AbstractController
             return $this->redirectToRoute('activity_list');
         }
 
+        $placeForm = $this->createForm(PlaceType::class, new Place());
+
+
         return $this->render('activity/addOrEdit.html.twig', [
             'form' => $activityForm->createView(),
-            'activity' => $activity
+            'activity' => $activity,
+            'placeForm' => $placeForm->createView(),
             ]);
     }
 
@@ -206,13 +212,11 @@ final class ActivityController extends AbstractController
             return $this->redirectToRoute('activity_detail', ['id' => $id]);
         }
 
-        // Récupération de l'état "Annulée"
         $canceledState = $entityManager->getRepository(State::class)->findOneBy(['name' => 'Annulée']);
         if (!$canceledState) {
             throw new \LogicException('L\'état "Annulée" est introuvable.');
         }
 
-        // Mise à jour de l’état et ajout du motif
         $activity->setState($canceledState);
         $activity->setCancelReason($cancelReason);
         $entityManager->flush();
