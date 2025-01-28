@@ -9,6 +9,7 @@ use App\Entity\State;
 use App\Form\ActivityType;
 use App\Service\ActivityService;
 use App\Service\SiteService;
+use App\Service\StateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,18 +24,21 @@ final class ActivityController extends AbstractController
 
     private ActivityService $activityService;
     private SiteService $siteService;
+    private StateService $stateService;
 
-    public function __construct(ActivityService $activityService, SiteService $siteService)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
+        $this->stateService = $stateService;
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
     public function list(): Response
     {
-        $activities = $this->activityService->getAllArchive(true);
-
+        $activities = $this->stateService->verfiAndChange(
+            $this->activityService->getAllIsArchive(true)
+        );
         $sites = $this->siteService->findAllSites();
 
         return $this->render('activity/list.html.twig', [
