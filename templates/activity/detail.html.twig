@@ -42,7 +42,7 @@
             </form>
         {% endif %}
 
-        {% if isManager %}
+        {% if isManager or is_granted('ROLE_ADMIN') %}
             <a href="{{ path('activity_edit', { id: activity.id }) }}" class="btn btn-warning">Modifier</a>
             <form action="{{ path('activity_cancel', { id: activity.id }) }}" method="post" style="display: inline;">
                 <button type="submit" class="btn btn-danger">Annuler</button>

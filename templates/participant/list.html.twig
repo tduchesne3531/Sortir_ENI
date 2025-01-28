@@ -50,7 +50,10 @@
                         Disable
                     </a>
                 </div>
-                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 rounded-full">
+{#                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 rounded-full">#}
+                {% if (participant.photo) %}
+                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 h-48 rounded-full mx-auto border-2 border-cyan-600 object-cover object-top">
+                {% endif %}
             </article>
         {% endfor %}
     </section>
