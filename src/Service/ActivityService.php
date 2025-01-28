@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\dto\ActivityFilter;
+use App\Entity\Participant;
 use App\Repository\ActivityRepository;
 
 class ActivityService
@@ -16,9 +18,9 @@ class ActivityService
             return $this->sortieRepository->find($id);
         }
 
-    public function getAllIsArchive(bool $isArchive): array
+    public function getAllByFilter(ActivityFilter $filter): array
     {
-        return $this->sortieRepository->findAllIsArchive($isArchive);
+        return $this->sortieRepository->findAllByFilter($filter);
     }
 
 }
