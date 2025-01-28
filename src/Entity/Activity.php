@@ -57,6 +57,9 @@ class Activity
     #[ORM\ManyToOne(inversedBy: 'activities')]
     private ?Participant $manager = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancelReason = null;
+
 
     public function __construct()
     {
@@ -210,6 +213,18 @@ class Activity
     public function setManager(?Participant $manager): static
     {
         $this->manager = $manager;
+
+        return $this;
+    }
+
+    public function getCancelReason(): ?string
+    {
+        return $this->cancelReason;
+    }
+
+    public function setCancelReason(?string $cancelReason): static
+    {
+        $this->cancelReason = $cancelReason;
 
         return $this;
     }
