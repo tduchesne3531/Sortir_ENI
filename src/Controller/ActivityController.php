@@ -129,9 +129,12 @@ final class ActivityController extends AbstractController
             return $this->redirectToRoute('activity_list');
 
         }
+        $placeForm = $this->createForm(PlaceType::class, new Place());
+
         return $this->render('activity/addOrEdit.html.twig', [
             'form' => $activityForm->createView(),
-            'activity' => $activity
+            'activity' => $activity,
+            'placeForm' => $placeForm->createView(),
         ]);
     }
 
