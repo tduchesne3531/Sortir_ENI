@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Activity;
+use App\Entity\State;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -22,9 +23,11 @@ class ActivityRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->setParameter('dateArchive', (new \DateTime())->modify('-1 month'))
             ->orderBy('s.registrationDeadLine', 'DESC')
-            ->where($isArchive
+            ->where(!$isArchive
                 ? 's.registrationDeadLine <= :dateArchive'
                 : 's.registrationDeadLine > :dateArchive')
+            ->andWhere('s.state != :state')
+            ->setParameter('state', 1)
             ->getQuery()->getResult();
     }
 

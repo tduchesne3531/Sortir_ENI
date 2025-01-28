@@ -68,13 +68,13 @@
         {{ form_errors(form.place) }}
     </div>
 
-    <div class="form-group">
-        {{ form_label(form.state) }}
-        {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.state) }}
-    </div>
+    <button type="submit" class="btn btn-primary" name="state" value="1">
+        Enregistrer
+    </button>
 
-    <button class="btn btn-primary">{{ activity.id ? 'Modifier' : 'Créer' }}</button>
+    <button type="submit" class="btn btn-primary" name="state" value="2">
+        Publier
+    </button>
     <a href="{{ path('activity_list') }}" class="btn btn-secondary">Annuler</a>
 
     {{ form_end(form) }}

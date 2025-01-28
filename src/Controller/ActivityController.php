@@ -9,8 +9,10 @@ use App\Entity\Place;
 use App\Entity\State;
 use App\Form\ActivityType;
 use App\Form\PlaceType;
+use App\Repository\StateRepository;
 use App\Service\ActivityService;
 use App\Service\SiteService;
+use App\Service\StateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,18 +27,23 @@ final class ActivityController extends AbstractController
 
     private ActivityService $activityService;
     private SiteService $siteService;
+    private StateService $stateService;
+    private StateRepository $stateRepository;
 
-    public function __construct(ActivityService $activityService, SiteService $siteService)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
+        $this->stateService = $stateService;
+        $this->stateRepository = $stateRepository;
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
     public function list(): Response
     {
-        $activities = $this->activityService->getAllArchive(true);
-
+        $activities = $this->stateService->verfiAndChange(
+            $this->activityService->getAllIsArchive(true)
+        );
         $sites = $this->siteService->findAllSites();
 
         return $this->render('activity/list.html.twig', [
@@ -82,6 +89,8 @@ final class ActivityController extends AbstractController
 
         if ($activityForm->isSubmitted() && $activityForm->isValid()) {
             $user = $this->getUser();
+            $action = $request->request->get('state');
+            $activity->setState($this->stateRepository->find($action));
             $activity->setCreatedBy($this->getUser());
             $activity->setManager($user instanceof Participant ? $user : null);
             $entityManager->persist($activity);
