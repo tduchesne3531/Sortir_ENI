@@ -186,7 +186,7 @@ final class ActivityController extends AbstractController
 
     #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function cancel(int $id, EntityManagerInterface $entityManager): Response
+    public function cancel(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -201,19 +201,29 @@ final class ActivityController extends AbstractController
         }
 
         if ($activity->getManager() !== $user && !$this->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Seul le créateur de la sortie ou un administrateur peut l\'annuler.');
+            throw $this->createAccessDeniedException('Seul le créateur ou un administrateur peut annuler cette sortie.');
         }
 
+        $cancelReason = $request->request->get('cancelReason');
+        if (empty($cancelReason)) {
+            $this->addFlash('danger', 'Un motif d’annulation est requis.');
+            return $this->redirectToRoute('activity_detail', ['id' => $id]);
+        }
+
+        // Récupération de l'état "Annulée"
         $canceledState = $entityManager->getRepository(State::class)->findOneBy(['name' => 'Annulée']);
         if (!$canceledState) {
             throw new \LogicException('L\'état "Annulée" est introuvable.');
         }
 
+        // Mise à jour de l’état et ajout du motif
         $activity->setState($canceledState);
+        $activity->setCancelReason($cancelReason);
         $entityManager->flush();
 
         $this->addFlash('success', 'La sortie a été annulée avec succès.');
 
         return $this->redirectToRoute('activity_detail', ['id' => $id]);
     }
+
 }

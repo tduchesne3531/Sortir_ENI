@@ -18,6 +18,9 @@
         <li><strong>Description :</strong> {{ activity.description }}</li>
         <li><strong>Participants :</strong> {{ activity.participants|length }} / {{ activity.maxRegistration }}</li>
         <li><strong>État :</strong> {{ activity.state.name }}</li>
+        {% if activity.state.name == 'Annulée' and activity.cancelReason %}
+            <li><strong>Motif d'annulation :</strong> {{ activity.cancelReason }}</li>
+        {% endif %}
     </ul>
 
     <h2>Participants inscrits</h2>
@@ -44,10 +47,17 @@
 
         {% if isManager or is_granted('ROLE_ADMIN') %}
             <a href="{{ path('activity_edit', { id: activity.id }) }}" class="btn btn-warning">Modifier</a>
-            <form action="{{ path('activity_cancel', { id: activity.id }) }}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Annuler</button>
-            </form>
+            {% if activity.state.name == 'Créée' %}
+{#                TODO Modifier cette partie pour pointer vers la méthode de modification de l'état#}
+                <a href="{{ path('activity_list', { id: activity.id }) }}" class="btn btn-success">Publier</a>
+            {% endif %}
+            {% if activity.state.name != 'Annulée' and activity.state.name not in ['Activité en cours', 'Passée'] %}
+                <button type="button" class="btn btn-danger bg-red-600 text-white px-4 py-2 rounded" onclick="openModal()">Annuler</button>
+            {% endif %}
         {% endif %}
-
     </div>
+
+    {{ include('components/cancelModal.html.twig') }}
 {% endblock %}
+
+
