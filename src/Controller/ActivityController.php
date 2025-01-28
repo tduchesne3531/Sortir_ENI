@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/activity', name: 'activity_')]
@@ -68,6 +69,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function add(
         Request $request,
         EntityManagerInterface $entityManager): Response
@@ -95,6 +97,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $activity = $this->activityService->findByID($id);
@@ -130,6 +133,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/register', name: 'register', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function register(int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -154,6 +158,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/unregister', name: 'unregister', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function unregister(int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -176,6 +181,7 @@ final class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function cancel(int $id, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -190,12 +196,10 @@ final class ActivityController extends AbstractController
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
         }
 
-        // Vérifie que l'utilisateur connecté est le manager de la sortie
-        if ($activity->getManager() !== $user) {
-            throw $this->createAccessDeniedException('Seul le créateur de la sortie peut l\'annuler.');
+        if ($activity->getManager() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Seul le créateur de la sortie ou un administrateur peut l\'annuler.');
         }
 
-        // Met à jour l'état de la sortie
         $canceledState = $entityManager->getRepository(State::class)->findOneBy(['name' => 'Annulée']);
         if (!$canceledState) {
             throw new \LogicException('L\'état "Annulée" est introuvable.');
@@ -208,6 +212,4 @@ final class ActivityController extends AbstractController
 
         return $this->redirectToRoute('activity_detail', ['id' => $id]);
     }
-
-
 }
