@@ -7,6 +7,7 @@ use App\Entity\Activity;
 use App\Entity\Participant;
 use App\Entity\State;
 use App\Form\ActivityType;
+use App\Repository\StateRepository;
 use App\Service\ActivityService;
 use App\Service\SiteService;
 use App\Service\StateService;
@@ -25,12 +26,14 @@ final class ActivityController extends AbstractController
     private ActivityService $activityService;
     private SiteService $siteService;
     private StateService $stateService;
+    private StateRepository $stateRepository;
 
-    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
         $this->stateService = $stateService;
+        $this->stateRepository = $stateRepository;
     }
 
     #[Route('/', name: 'list', methods: ['GET'])]
@@ -84,6 +87,8 @@ final class ActivityController extends AbstractController
 
         if ($activityForm->isSubmitted() && $activityForm->isValid()) {
             $user = $this->getUser();
+            $action = $request->request->get('state');
+            $activity->setState($this->stateRepository->find($action));
             $activity->setCreatedBy($this->getUser());
             $activity->setManager($user instanceof Participant ? $user : null);
             $entityManager->persist($activity);
