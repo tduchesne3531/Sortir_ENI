@@ -15,11 +15,12 @@ class PlaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('latitude')
-            ->add('longitude')
+            ->add('name', null, ['label' => 'Nom'])
+            ->add('address', null, ['label' => 'Adresse'])
+            ->add('latitude', null, ['label' => 'Latitude'])
+            ->add('longitude', null, ['label' => 'Longitude'])
             ->add('city', EntityType::class, [
+                'label' => 'Ville',
                 'class' => City::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Sélectionnez une ville',

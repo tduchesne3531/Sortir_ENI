@@ -1,0 +1,96 @@
+<div id="addPlaceModal" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-lg">
+        <div class="flex justify-between items-center border-b pb-3">
+            <h5 class="text-lg font-bold">Ajouter un nouveau lieu</h5>
+            <button type="button" class="text-gray-500 hover:text-gray-700" data-modal-close="#addPlaceModal">
+                ✕
+            </button>
+        </div>
+        <form id="addPlaceForm" method="post">
+            {{ form_start(placeForm, { 'attr': { 'class': 'mt-4' } }) }}
+            <div class="mb-4">
+                {{ form_row(placeForm.name, { 'attr': { 'class': 'form-control' } }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(placeForm.address, { 'attr': { 'class': 'form-control' } }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(placeForm.latitude, { 'attr': { 'class': 'form-control' } }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(placeForm.longitude, { 'attr': { 'class': 'form-control' } }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(placeForm.city, { 'attr': { 'class': 'form-control' } }) }}
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md" data-modal-close="#addPlaceModal">
+                    Annuler
+                </button>
+                <button type="submit" class="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                    Enregistrer
+                </button>
+            </div>
+            {{ form_end(placeForm) }}
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    document.querySelectorAll('[data-modal-target]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const target = document.querySelector(button.getAttribute('data-modal-target'));
+            if (target) {
+                target.classList.remove('hidden');
+            }
+        });
+    });
+
+
+    document.querySelectorAll('[data-modal-close]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const target = button.getAttribute('data-modal-close');
+            const modal = document.querySelector(target);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+
+    document.getElementById('addPlaceForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('{{ path('place_add_from_modal') }}', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => {
+                        throw new Error(data.details ? data.details.join(', ') : 'Erreur inconnue.');
+                    });
+                }
+                return response.json();
+            })
+            .then((data) => {
+                const placeSelect = document.querySelector('#{{ form.place.vars.id }}');
+                const newOption = document.createElement('option');
+                newOption.value = data.id;
+                newOption.textContent = data.name;
+                newOption.selected = true;
+                placeSelect.appendChild(newOption);
+
+                document.getElementById('addPlaceModal').classList.add('hidden');
+
+                document.getElementById('addPlaceForm').reset();
+            })
+            .catch((error) => {
+                alert('Erreur : ' + error.message);
+            });
+    });
+
+</script>
