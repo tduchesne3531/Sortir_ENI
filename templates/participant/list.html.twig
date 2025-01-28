@@ -1,168 +1,61 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1 class="text-center text-3xl font-bold text-cyan-600 mb-8">List of all participants!</h1>
+	<h1 class="text-center text-3xl font-bold mb-8">List of all participants!</h1>
 
-<<<<<<< Updated upstream
-{#  TODO: pagination  #}
-{#    <div class="flex_div flex_between">#}
-{#        {% if currentPage > 1 %}#}
-{#            <a href="{{ path('participant_list', {'page': currentPage - 1}) }}">#}
-{#                <button>Previous page</button>#}
-{#            </a>#}
-{#        {% else %}#}
-{#            <div></div>#}
-{#        {% endif %}#}
-{#        {% if currentPage < maxPage %}#}
-{#            <a href="{{ path('participant_list', {'page': currentPage + 1}) }}">#}
-{#                <button>Next page</button>#}
-{#            </a>#}
-{#        {% endif %}#}
-{#    </div>#}
-    <section class="participants-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
-        {% for participant in participants %}
-            <article class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg">
-                <h2 class="text-lg font-bold text-gray-800 mb-2" title="{{ participant.firstname }} | {{ participant.lastname }}">
-                    {{ participant.firstname }} {{ participant.lastname }}
-                </h2>
-                <ul class="text-gray-600 mb-4">
-                    <li><span class="font-semibold">Pseudo:</span> {{ participant.pseudo }}</li>
-                    <li><span class="font-semibold">Email:</span> {{ participant.email }}</li>
-                    <li><span class="font-semibold">Phone:</span> {{ participant.phone }}</li>
-                    <li><span class="font-semibold">Site:</span> {{ participant.site.name }}</li>
-                    <li><span class="font-semibold">Admin:</span> {{ participant.isAdmin ? 'Yes' : 'No' }}</li>
-                    <li><span class="font-semibold">Active:</span> {{ participant.isActive ? 'Yes' : 'No' }}</li>
-                </ul>
-                <div class="flex flex-wrap gap-2">
-                    <a href="{{ path('participant_detail', {'id': participant.id }) }}"
-                       class="bg-cyan-600 text-white px-4 py-2 rounded shadow hover:bg-cyan-700 transition">
-                        Details
-                    </a>
-                    <a href="{{ path('participant_edit', {'id': participant.id }) }}"
-                       class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition">
-                        Edit
-                    </a>
-                    <a href="{{ path('participant_delete', {'id': participant.id }) }}"
-                       class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">
-                        Delete
-                    </a>
-                    <a href="{{ path('participant_disable', {'id': participant.id }) }}"
-                       class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition">
-                        Disable
-                    </a>
-                </div>
-                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 rounded-full">
-            </article>
-        {% endfor %}
-    </section>
-=======
-	{#  TODO: pagination  #}
-	{#    <div class="flex_div flex_between">#}
-	{#        {% if currentPage > 1 %}#}
-	{#            <a href="{{ path('participant_list', {'page': currentPage - 1}) }}">#}
-	{#                <button>Previous page</button>#}
-	{#            </a>#}
-	{#        {% else %}#}
-	{#            <div></div>#}
-	{#        {% endif %}#}
-	{#        {% if currentPage < maxPage %}#}
-	{#            <a href="{{ path('participant_list', {'page': currentPage + 1}) }}">#}
-	{#                <button>Next page</button>#}
-	{#            </a>#}
-	{#        {% endif %}#}
-	{#    </div>#}
-
-		<section class="grid gap-6 px-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"> {% for participant in participants %}
-			<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-lg">
-				{% if (participant.photo) %}
-					<div class="text-center mb-4">
-						<img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 h-48 rounded-full mx-auto border-2 border-cyan-600 object-cover object-top">
-					</div>
-				{% endif %}
-				<h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ participant.firstname }} | {{ participant.lastname }}">
-					{{ participant.firstname }}
-					{{ participant.lastname }}
-				</h2>
-				<ul class="text-gray-600 mb-6 space-y-2">
-					<li>
-						<span class="font-semibold">Pseudo:</span>
-						{{ participant.pseudo }}</li>
-					<li>
-						<span class="font-semibold">Email:</span>
-						{{ participant.email }}</li>
-					<li>
-						<span class="font-semibold">Phone:</span>
-						{{ participant.phone }}</li>
-					<li>
-						<span class="font-semibold">Site:</span>
-						{{ participant.site.name }}</li>
-					<li>
-						<span class="font-semibold">Admin:</span>
-						{{ participant.isAdmin ? 'Yes' : 'No' }}</li>
-					<li>
-						<span class="font-semibold">Active:</span>
-						{{ participant.isActive ? 'Yes' : 'No' }}</li>
-				</ul>
-				<div class="flex flex-wrap justify-center gap-4">
-					<a
-						href="{{ path('participant_detail', {'id': participant.id }) }}" class="text-cyan-600 px-4 py-2 rounded-full hover:text-cyan-700 transition items-center gap-2">
-						{#                        Details#}
-						<span class="material-symbols-rounded text-[48px]">info</span>
+	<section class="participants-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
+			{% for participant in participants %}
+				<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-gray-500">
+					<a href="{{ path('participant_detail', {'id': participant.id }) }}" class="m-0 p-0">
+						{% if (participant.photo) %}
+							<div class="text-center mb-4">
+								<img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 h-48 rounded-full mx-auto border-2 border-cyan-600 object-cover object-top">
+							</div>
+						{% endif %}
+						<h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ participant.firstname }} | {{ participant.lastname }}">
+							{{ participant.firstname }}
+							{{ participant.lastname }}
+						</h2>
+						<ul class="text-gray-600 mb-6 space-y-2">
+							<li>
+								<span class="font-semibold">Pseudo:</span>
+								{{ participant.pseudo }}</li>
+							<li>
+								<span class="font-semibold">Email:</span>
+								{{ participant.email }}</li>
+							<li>
+								<span class="font-semibold">Phone:</span>
+								{{ participant.phone }}</li>
+							<li>
+								<span class="font-semibold">Site:</span>
+								{{ participant.site.name }}</li>
+							<li>
+								<span class="font-semibold">Admin:</span>
+								{{ participant.isAdmin ? 'Yes' : 'No' }}</li>
+							<li>
+								<span class="font-semibold">Active:</span>
+								{{ participant.isActive ? 'Yes' : 'No' }}</li>
+						</ul>
+						<div class="flex flex-wrap justify-center gap-4">
+							<a
+									href="{{ path('participant_detail', {'id': participant.id }) }}" class="text-cyan-600 px-4 py-2 rounded-full hover:text-cyan-700 transition items-center gap-2">
+								<span class="material-symbols-rounded text-3xl">info</span>
+							</a>
+							<a
+									href="{{ path('participant_edit', {'id': participant.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition items-center gap-2">
+								<span class="material-symbols-rounded text-3xl">edit</span>
+							</a>
+							<a
+									href="{{ path('participant_delete', {'id': participant.id }) }}" class="text-red-500 px-4 py-2 rounded-full hover:text-red-700 transition items-center gap-2">
+								<span class="material-symbols-rounded text-3xl">delete</span>
+							</a>
+							<a
+									href="{{ path('participant_disable', {'id': participant.id }) }}" class="text-gray-500 px-4 py-2 rounded-full hover:text-gray-600 transition items-center gap-2">
+								<span class="material-symbols-rounded text-3xl">block</span>
+							</a>
+						</div>
 					</a>
-					<a
-						href="{{ path('participant_edit', {'id': participant.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition items-center gap-2">
-						{#                        Edit#}
-						<span class="material-symbols-rounded text-3xl">edit</span>
-					</a>
-					<a
-						href="{{ path('participant_delete', {'id': participant.id }) }}" class="text-red-500 px-4 py-2 rounded-full hover:text-red-700 transition items-center gap-2">
-						{#                        Delete#}
-						<span class="material-symbols-rounded text-3xl">delete</span>
-					</a>
-					<a
-						href="{{ path('participant_disable', {'id': participant.id }) }}" class="text-gray-500 px-4 py-2 rounded-full hover:text-gray-600 transition items-center gap-2">
-						{#                        Disable#}
-						<span class="material-symbols-rounded text-3xl">block</span>
-					</a>
-				</div>
-			</article>
+				</article>
 		{% endfor %}
 	</section>
-	{#    <section class="participants-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">#}
-{#        {% for participant in participants %}#}
-	{#            <article class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg">#}
-	{#                <h2 class="text-lg font-bold text-gray-800 mb-2" title="{{ participant.firstname }} | {{ participant.lastname }}">#}
-	{#                    {{ participant.firstname }} {{ participant.lastname }}#}
-	{#                </h2>#}
-	{#                <ul class="text-gray-600 mb-4">#}
-	{#                    <li><span class="font-semibold">Pseudo:</span> {{ participant.pseudo }}</li>#}
-	{#                    <li><span class="font-semibold">Email:</span> {{ participant.email }}</li>#}
-	{#                    <li><span class="font-semibold">Phone:</span> {{ participant.phone }}</li>#}
-	{#                    <li><span class="font-semibold">Site:</span> {{ participant.site.name }}</li>#}
-	{#                    <li><span class="font-semibold">Admin:</span> {{ participant.isAdmin ? 'Yes' : 'No' }}</li>#}
-	{#                    <li><span class="font-semibold">Active:</span> {{ participant.isActive ? 'Yes' : 'No' }}</li>#}
-	{#                </ul>#}
-	{#                <div class="flex flex-wrap gap-2">#}
-	{#                    <a href="{{ path('participant_detail', {'id': participant.id }) }}"#}
-	{#                       class="bg-cyan-600 text-white px-4 py-2 rounded shadow hover:bg-cyan-700 transition">#}
-	{#                        Details#}
-	{#                    </a>#}
-	{#                    <a href="{{ path('participant_edit', {'id': participant.id }) }}"#}
-	{#                       class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition">#}
-	{#                        Edit#}
-	{#                    </a>#}
-	{#                    <a href="{{ path('participant_delete', {'id': participant.id }) }}"#}
-	{#                       class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">#}
-	{#                        Delete#}
-	{#                    </a>#}
-	{#                    <a href="{{ path('participant_disable', {'id': participant.id }) }}"#}
-	{#                       class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition">#}
-	{#                        Disable#}
-	{#                    </a>#}
-	{#                </div>#}
-	{#                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 rounded-full">#}
-	{#            </article>#}
-	{#        {% endfor %}#}
-	{#    </section>#}
->>>>>>> Stashed changes
 {% endblock %}

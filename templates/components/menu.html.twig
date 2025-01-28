@@ -1,14 +1,70 @@
-<nav>
-    <ul>
-        <li><a href="{{ path('app_home') }}">Accueil</a></li>
+<div class="relative">
+    <!-- Burger button -->
+    <button class="mr-[20px] text-cyan-600 md:hidden" id="burger-menu-toggle">
+        <span class="material-symbols-rounded text-3xl">menu</span>
+    </button>
+
+    <!-- Mobile and tablet burger menu -->
+    <ul id="mobile-menu" class="hidden md:hidden absolute top-12 w-90 bg-amber-600 px-2 py-2 rounded-lg shadow-lg text-white z-50 justify-center">
         <li>
-            {% if app.user %}
-                <li><a href="{{ path('activity_add') }}">Nouvelle sortie</a></li>
-                <li><a href="{{ path('participant_detail', { id: app.user.id }) }}">Mon profil</a></li>
-                <a href="{{ path('app_logout') }}">Se déconnecter</a>
-            {% else %}
-                <a href="{{ path('app_login') }}">Se connecter</a>
-            {% endif %}
+            <a href="{{ path('activity_list') }}" class="hover:text-cyan-700">
+                <span class="material-symbols-rounded text-3xl">home</span>
+            </a>
         </li>
+        {% if app.user %}
+            <li>
+                <a href="{{ path('activity_add') }}" class="hover:text-cyan-700">
+                    <span class="material-symbols-rounded text-3xl">add_circle</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('participant_detail', { id: app.user.id }) }}" class="hover:text-cyan-700">
+                    <span class="material-symbols-rounded text-3xl">person</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_logout') }}" class="hover:text-red-700">
+                    <span class="material-symbols-rounded text-3xl">logout</span>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('app_login') }}" class="hover:text-cyan-600">
+                    <span class="material-symbols-rounded text-3xl">login</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
-</nav>
+
+    <!-- Desktop menu -->
+    <ul class="hidden md:flex gap-6 text-cyan-600">
+        <li>
+            <a href="{{ path('activity_list') }}" class="flex items-center gap-2 hover:text-cyan-800">
+                <span class="material-symbols-rounded text-3xl">home</span>
+            </a>
+        </li>
+        {% if app.user %}
+            <li>
+                <a href="{{ path('activity_add') }}" class="flex items-center gap-2 hover:text-cyan-800 transition">
+                    Activity <span class="material-symbols-rounded text-3xl">add_circle</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('participant_detail', { id: app.user.id }) }}" class="flex items-center gap-2 hover:text-cyan-800 transition">
+                    <span class="material-symbols-rounded text-3xl">person</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_logout') }}" class="flex items-center gap-2 hover:text-red-700 transition">
+                    <span class="material-symbols-rounded text-3xl">logout</span>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-cyan-800 transition">
+                    <span class="material-symbols-rounded text-3xl">login</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>

@@ -1,17 +1,53 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block body %}#}
+
+{#    {{ form_errors(participantForm) }}#}
+
+{#    <h1>#}
+{#        {{ mode == 'edit' ? 'Edit Participant' : (mode == 'add' ? 'Add Participant' : 'My Account') }}#}
+{#    </h1>#}
+{#    {{ form_start(participantForm) }}#}
+
+{#    {{ form_widget(participantForm) }}#}
+{#    <button class="btn btn-primary">{{ mode == 'edit' ? 'Update' : (mode == 'add' ? 'Create' : 'My Account') }}</button>#}
+{#    {{ form_end(participantForm) }}#}
+{#    <a href="{{ path('participant_list') }}" class="btn btn-secondary">Back to list</a>#}
+
+{#{% endblock %}#}
 {% extends 'base.html.twig' %}
 
 {% block body %}
 
     {{ form_errors(participantForm) }}
 
-    <h1>
+    <h1 class="text-3xl font-bold text-center mb-8">
         {{ mode == 'edit' ? 'Edit Participant' : (mode == 'add' ? 'Add Participant' : 'My Account') }}
     </h1>
-    {{ form_start(participantForm) }}
 
-    {{ form_widget(participantForm) }}
-    <button class="btn btn-primary">{{ mode == 'edit' ? 'Update' : (mode == 'add' ? 'Create' : 'My Account') }}</button>
-    {{ form_end(participantForm) }}
-    <a href="{{ path('participant_list') }}" class="btn btn-secondary">Back to list</a>
+    <section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
+        {{ form_start(participantForm, {'attr': {'class': 'space-y-4'}}) }}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for child in participantForm %}
+                <div>
+                    {{ form_label(child, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-1'}}) }}
+                    {{ form_widget(child, {'attr': {'class': 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'}}) }}
+                    {{ form_errors(child, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-around mt-6">
+            <button type="submit" class="bg-cyan-600 text-white px-6 py-2 rounded-full hover:bg-cyan-700 transition">
+                {{ mode == 'edit' ? 'Update' : (mode == 'add' ? 'Create' : 'My Account') }}
+            </button>
+            <a href="{{ path('participant_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">
+                Back to list
+            </a>
+        </div>
+
+        {{ form_end(participantForm) }}
+    </section>
 
 {% endblock %}

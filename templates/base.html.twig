@@ -1,31 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
-<<<<<<< Updated upstream
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/jpg" href="{{ asset('images/logo_sortir_proposal.png') }}" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
-        <link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet">
-        <link href="https://fonts.google.com/specimen/Yatra+One?preview.text=Sortir&categoryFilters=Feeling:%2FExpressive%2FAwkward" rel="stylesheet">
-        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-=======
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
 			{% block title %}Sortir !
 			{% endblock %}
 		</title>
 		<link rel="icon" type="image/jpg" href="{{ asset('images/logo_sortir_proposal.png') }}"/>
 		{% block stylesheets %}
-			<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"/>
-			<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet">
-			<link href="https://fonts.google.com/specimen/Yatra+One?preview.text=Sortir&categoryFilters=Feeling:%2FExpressive%2FAwkward" rel="stylesheet">
-			<link
-			rel="stylesheet" href="{{ asset('styles/app.css') }}">
->>>>>>> Stashed changes
-
-		{# // <script src="https://unpkg.com/@tailwindcss/browser@4"></script> #}
+			<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded&display=swap" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet">
+			<link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 		{% endblock %}
 
 		{% block javascripts %}
@@ -34,7 +21,7 @@
 			{% endblock %}
 		{% endblock %}
 	</head>
-	<body>
+	<body class="flex flex-col h-screen">
 		{% include 'components/header.html.twig' %}
 		{% block body %}{% endblock %}
 		{% include 'components/footer.html.twig' %}
