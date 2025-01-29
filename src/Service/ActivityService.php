@@ -2,12 +2,9 @@
 
 namespace App\Service;
 
-use App\Controller\ActivityController;
-use App\Entity\Activity;
-use App\Entity\Site;
-use App\Repository\SiteRepository;
+use App\dto\ActivityFilter;
+use App\Entity\Participant;
 use App\Repository\ActivityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ActivityService
 {
@@ -21,9 +18,9 @@ class ActivityService
             return $this->sortieRepository->find($id);
         }
 
-    public function getAllArchive(bool $isArchive): array
+    public function getAllByFilter(ActivityFilter $filter): array
     {
-        return $this->sortieRepository->findAllIsArchive($isArchive);
+        return $this->sortieRepository->findAllByFilter($filter);
     }
 
 }

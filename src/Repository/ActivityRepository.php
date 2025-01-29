@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
+use App\dto\ActivityFilter;
 use App\Entity\Activity;
+use App\Entity\Participant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Activity>
@@ -17,15 +18,45 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
-    public function findAllIsArchive(bool $isArchive): array
+    public function findAllByFilter(ActivityFilter $filter): array
     {
-        return $this->createQueryBuilder('s')
-            ->setParameter('dateArchive', (new \DateTime())->modify('-1 month'))
+        $now =( new \DateTime())->modify('-1 month');
+
+        $request =  $this->createQueryBuilder('s')
+            ->setParameter('dateArchive', $now)
             ->orderBy('s.registrationDeadLine', 'DESC')
-            ->where(!$isArchive
+            ->where($filter->getArchived()
                 ? 's.registrationDeadLine <= :dateArchive'
                 : 's.registrationDeadLine > :dateArchive')
-            ->getQuery()->getResult();
+            ->andWhere('s.state != :state1')
+            ->setParameter('state1', 1)
+            ->andWhere($filter->getPast() ? 's.state = :state2' : 's.state != :state2')
+            ->setParameter('state2', 5);
+
+        if ($filter->getSite())
+            $request
+                ->andWhere('s.site = :site')
+                ->setParameter('site', $filter->getSite()->getId());
+        if ($filter->getStartDate())
+            $request
+                ->andWhere('s.dateStartTime >= :dateStartTime1')
+                ->setParameter('dateStartTime1', $filter->getStartDate());
+        if ($filter->getEndDate())
+            $request
+                ->andWhere('s.dateStartTime <= :dateStartTime2')
+                ->setParameter('dateStartTime2', $filter->getEndDate());
+        if ($filter->getOrganizer())
+            $request
+                ->andWhere('s.manager = :manager')
+                ->setParameter('manager', $filter->getUser()->getId());
+        if ($filter->getRegistered() && $filter->getUser() instanceof Participant)
+            $request->andWhere(':user MEMBER OF s.participants')
+                ->setParameter('user', $filter->getRegistered());
+        if ($filter->getNotRegistered() && $filter->getUser() instanceof Participant)
+            $request->andWhere(':user NOT MEMBER OF s.participants')
+                ->setParameter('user', $filter->getNotRegistered());
+
+        return $request->getQuery()->getResult();
     }
 
 }

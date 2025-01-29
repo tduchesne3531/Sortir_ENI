@@ -1,34 +1,71 @@
-<div id="filters" class="mb-4">
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <input type="text" id="filter-name" placeholder="Rechercher par nom" class="form-control">
+{% block title %}Filtrer les activités{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Filtrer les activités</h1>
+
+        {{ form_start(form, { 'method': 'get', 'attr': { 'class': 'form-inline' } }) }}
+        <div class="row g-3">
+            <div class="col-md-4">
+                {{ form_label(form.site) }}
+                {{ form_widget(form.site, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.site) }}
+            </div>
+
+            <div class="col-md-4">
+                {{ form_label(form.search) }}
+                {{ form_widget(form.search, { 'attr': { 'class': 'form-control', 'placeholder': 'Rechercher...' } }) }}
+                {{ form_errors(form.search) }}
+            </div>
+
+            <div class="col-md-4">
+                {{ form_label(form.startDate) }}
+                {{ form_widget(form.startDate, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.startDate) }}
+            </div>
+
+            <div class="col-md-4">
+                {{ form_label(form.endDate) }}
+                {{ form_widget(form.endDate, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(form.endDate) }}
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check">
+                    {{ form_widget(form.organizer, { 'attr': { 'class': 'form-check-input' } }) }}
+                    {{ form_label(form.organizer, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                    {{ form_errors(form.organizer) }}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check">
+                    {{ form_widget(form.registered, { 'attr': { 'class': 'form-check-input' } }) }}
+                    {{ form_label(form.registered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                    {{ form_errors(form.registered) }}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check">
+                    {{ form_widget(form.notRegistered, { 'attr': { 'class': 'form-check-input' } }) }}
+                    {{ form_label(form.notRegistered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                    {{ form_errors(form.notRegistered) }}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check">
+                    {{ form_widget(form.past, { 'attr': { 'class': 'form-check-input' } }) }}
+                    {{ form_label(form.past, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                    {{ form_errors(form.past) }}
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <label>Date de début</label>
-            <input type="date" id="filter-start-date" class="form-control">
-        </div>
-        <div class="col-md-4 mb-3">
-            <label>Date de fin</label>
-            <input type="date" id="filter-end-date" class="form-control">
-        </div>
+
+        <button type="submit" class="btn btn-primary filter-button">
+            Rechercher
+        </button>
+        {{ form_end(form) }}
     </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <select id="filter-site" class="form-control">
-                <option value="">Tous les sites</option>
-                {% for site in sites %}
-                    <option value="{{ site.id }}">{{ site.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-6 mb-3">
-            <select id="filter-participation" class="form-control">
-                <option value="">Toutes les sorties</option>
-                {#                    <option value="created">Mes sorties créées</option>#}
-                <option value="participating">Inscrit</option>
-                <option value="not_participating">Non inscrit</option>
-            </select>
-        </div>
-    </div>
-    <button id="filter-reset" class="btn btn-secondary mt-2">Réinitialiser</button>
-</div>
+{% endblock %}

@@ -43,7 +43,8 @@
                                 <strong>Participants :</strong>
                                 {{ activity.participants|length }} / {{ activity.maxRegistration }}
                             </p>
-                            <a href="{{ path('activity_detail', { id: activity.id }) }}" class="btn btn-primary">Détails</a>
+                            <a href="{{ path('activity_detail', { id: activity.id }) }}"
+                               class="btn btn-primary">Détails</a>
                         </div>
                     </div>
                 </div>
@@ -54,8 +55,3 @@
         <p class="text-center">Aucune sortie disponible pour le moment.</p>
     {% endif %}
 {% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('js/activityFilter.js') }}"></script>
-{% endblock %}
-
