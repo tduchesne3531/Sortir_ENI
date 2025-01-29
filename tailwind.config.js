@@ -23,10 +23,6 @@ module.exports = {
         'success': '#8EBF26',
         'information': '#21AA93',
       },
-      boxShadow: {
-        'home': '0 12px 16px rgba(0,0,0,.04), 0 4px 56px rgba(0,0,0,.04)',
-        'amber-hover': '0 12px 16px rgba(245, 158, 11, 0.5), 0 4px 56px rgba(245, 158, 11, 0.5)',
-      },
     },
   },
   plugins: [

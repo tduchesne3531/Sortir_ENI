@@ -50,8 +50,10 @@
 								<span class="material-symbols-rounded text-3xl">delete</span>
 							</a>
 							<a
-									href="{{ path('participant_disable', {'id': participant.id }) }}" class="text-gray-500 px-4 py-2 rounded-full hover:text-gray-600 transition items-center gap-2">
-								<span class="material-symbols-rounded text-3xl">block</span>
+								href="{{ path('participant_disable', {'id': participant.id }) }}" class="{{ participant.isActive ? 'text-gray-500' : 'text-success' }} px-4 py-2 rounded-full hover:transition items-center gap-2">
+								<span class="material-symbols-rounded text-3xl">
+									{{ participant.isActive ? 'block' : 'lock_open' }}
+								</span>
 							</a>
 						</div>
 					</a>

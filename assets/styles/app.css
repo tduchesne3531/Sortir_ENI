@@ -9,7 +9,9 @@ body {
 	line-height: 1.5;
 	font-weight: 400;
 
-	@apply h-full w-full p-0 m-0 flex flex-col items-center;
+	scroll-behavior: smooth;
+
+	@apply min-h-screen w-full p-0 m-0 flex flex-col items-center;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -25,5 +27,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 input, button {
-	@apply border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500;
+	@apply border-2 border-gray-300 rounded-lg p-2 focus:border-cyan-600 focus:outline-none;
 }
