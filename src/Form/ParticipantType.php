@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
@@ -23,12 +24,23 @@ class ParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('pseudo')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('phone', TelType::class)
-            ->add('email', EmailType::class)
+            ->add('pseudo', TextType::class, [
+                'label' => 'Pseudo',
+            ])
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom',
+            ])
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom',
+            ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone',
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+            ])
             ->add('plainPassword', RepeatedType::class, [
+                'label' => false,
                 'type' => PasswordType::class,
                 'options' => [
                     'attr' => [
@@ -49,10 +61,14 @@ class ParticipantType extends AbstractType
 //                        new PasswordStrength(),
 //                        new NotCompromisedPassword(),
                     ],
-                    'label' => 'New password',
+                    'label' => 'Mot de passe',
+                    'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],
+                    'attr' => ['class' => 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'],
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'Confirmation de mot de passe',
+                    'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],
+                    'attr' => ['class' => 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'],
                 ],
                 'invalid_message' => 'The password fields must match.',
                 'mapped' => false,
@@ -93,6 +109,7 @@ class ParticipantType extends AbstractType
         if ($options['is_edit_mode'] ?? false) {
             $builder
                 ->add('plainPassword', RepeatedType::class, [
+                    'label' => false,
                     'type' => PasswordType::class,
                     'options' => [
                         'attr' => [
@@ -110,10 +127,14 @@ class ParticipantType extends AbstractType
 //                        new PasswordStrength(),
 //                        new NotCompromisedPassword(),
                         ],
-                        'label' => 'New password',
+                        'label' => 'Mot de passe',
+                        'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],
+                        'attr' => ['class' => 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'],
                     ],
                     'second_options' => [
-                        'label' => 'Repeat Password',
+                        'label' => 'Confirmation de mot de passe',
+                        'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],
+                        'attr' => ['class' => 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'],
                     ],
                     'invalid_message' => 'The password fields must match.',
                     'mapped' => false,

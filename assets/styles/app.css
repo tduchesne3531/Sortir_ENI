@@ -1,103 +1,31 @@
-header {
-    display: flex;
-    align-items: center; /* Aligne verticalement les éléments */
-    justify-content: space-between; /* Sépare les éléments horizontalement */
-    padding: 10px 20px;
-    background-color: #f8f9fa; /* Couleur de fond, ajustable */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour le style */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	font-family: 'Monserrat', sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	scroll-behavior: smooth;
+
+	@apply min-h-screen w-full p-0 m-0 flex flex-col items-center;
 }
 
-header img {
-    height: 50px; /* Ajuste la taille du logo */
-    width: auto; /* Conserve les proportions */
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Yatra One', cursive;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 1.5rem; /* Ajuste la taille du titre */
-    color: #333; /* Couleur du texte */
+#burger-menu-toggle {
+	margin-right: 3rem;
 }
 
-header nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex; /* Affiche les éléments en ligne */
-    gap: 15px; /* Espace entre les éléments */
+#mobile-menu {
+	left: -0.45rem;
 }
 
-header nav ul li a {
-    text-decoration: none; /* Supprime le soulignement des liens */
-    color: #007bff; /* Couleur des liens */
-    font-weight: bold; /* Met les liens en gras */
-    transition: color 0.3s ease; /* Animation fluide */
+input, button {
+	@apply border-2 border-gray-300 rounded-lg p-2 focus:border-cyan-600 focus:outline-none;
 }
-
-header nav ul li a:hover {
-    color: #0056b3; /* Couleur au survol */
-}
-
-footer {
-    background-color: #333; /* Fond sombre */
-    color: #fff; /* Texte clair */
-    text-align: center; /* Centre le texte */
-    padding: 10px 0; /* Ajoute un peu d'espace vertical */
-    font-size: 0.9rem; /* Taille de texte plus petite */
-    position: relative; /* Utile pour un positionnement futur */
-    bottom: 0;
-    width: 100%; /* Assure que le footer s'étend sur toute la largeur */
-}
-
-footer p {
-    margin: 0; /* Supprime les marges par défaut */
-}
-
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.col {
-    flex: 1 1 calc(33.333% - 20px); /* 3 colonnes */
-    max-width: calc(33.333% - 20px);
-    box-sizing: border-box;
-}
-
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 12px;
-}
-
-.card-body {
-    font-size: 0.9rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    text-decoration: none;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
