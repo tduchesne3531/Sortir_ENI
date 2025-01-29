@@ -7,11 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
+use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[UniqueEntity(fields: ['pseudo'], message: 'This pseudo is already in use')]
+#[UniqueEntity(fields: ['email'], message: 'Cette adresse email est déjà associée à un compte existant')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé')]
 #[ORM\Table(name: 'user')]
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
@@ -25,6 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "Veuillez renseigner une adresse email.")]
+    #[Assert\Email(message: "Veuillez entrer une adresse email valide.")]
     private string $email;
 
     /**
@@ -37,10 +42,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\Length(
+        min : 6,
+        minMessage: "Le mot de passe doit contenir au moins 6 caractères."
+    )]
     private string $password;
 
     #[ORM\Column(length: 50)]
-//    TODO: nullable ??
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Le pseudo doit contenir au moins {{ limit }} caractères !",
+        maxMessage: "Le pseudo ne doit pas contenir plus de {{ limit }} caractères !"
+    )]
     private ?string $pseudo = null;
 
     #[ORM\Column]
