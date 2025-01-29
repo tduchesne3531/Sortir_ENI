@@ -50,11 +50,11 @@ class ParticipantType extends AbstractType
                 'first_options' => [
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a password',
+                            'message' => 'Entrez un mot de passe',
                         ]),
                         new Length([
                             'min' => 6,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                            'minMessage' => 'Le mot de passe ne doit pas contenir moins de {{ limit }} caractères',
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
@@ -70,7 +70,7 @@ class ParticipantType extends AbstractType
                     'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],
                     'attr' => ['class' => 'w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2'],
                 ],
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'mapped' => false,
             ])
             ->add('isAdmin', ChoiceType::class, [
