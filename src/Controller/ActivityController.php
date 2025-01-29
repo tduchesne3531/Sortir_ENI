@@ -6,9 +6,11 @@ namespace App\Controller;
 use App\dto\ActivityFilter;
 use App\Entity\Activity;
 use App\Entity\Participant;
+use App\Entity\Place;
 use App\Entity\State;
 use App\Form\ActivitiesFilterType;
 use App\Form\ActivityType;
+use App\Form\PlaceType;
 use App\Repository\StateRepository;
 use App\Service\ActivityService;
 use App\Service\ParticipantService;
@@ -30,22 +32,19 @@ final class ActivityController extends AbstractController
     private SiteService $siteService;
     private StateService $stateService;
     private StateRepository $stateRepository;
-    private ParticipantService $participantService;
 
     /**
      * @param ActivityService $activityService
      * @param SiteService $siteService
      * @param StateService $stateService
      * @param StateRepository $stateRepository
-     * @param ParticipantService $participantService
      */
-    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository, ParticipantService $participantService)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
         $this->stateService = $stateService;
         $this->stateRepository = $stateRepository;
-        $this->participantService = $participantService;
     }
 
 
@@ -127,9 +126,13 @@ final class ActivityController extends AbstractController
             return $this->redirectToRoute('activity_list');
         }
 
+        $placeForm = $this->createForm(PlaceType::class, new Place());
+
+
         return $this->render('activity/addOrEdit.html.twig', [
             'form' => $activityForm->createView(),
-            'activity' => $activity
+            'activity' => $activity,
+            'placeForm' => $placeForm->createView()
         ]);
     }
 
@@ -151,9 +154,12 @@ final class ActivityController extends AbstractController
             return $this->redirectToRoute('activity_list');
 
         }
+        $placeForm = $this->createForm(PlaceType::class, new Place());
+
         return $this->render('activity/addOrEdit.html.twig', [
             'form' => $activityForm->createView(),
-            'activity' => $activity
+            'activity' => $activity,
+            'placeForm' => $placeForm->createView(),
         ]);
     }
 

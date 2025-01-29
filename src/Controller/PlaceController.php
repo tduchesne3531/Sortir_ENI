@@ -8,6 +8,7 @@ use App\Service\CityService;
 use App\Service\PlaceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -63,7 +64,7 @@ final class PlaceController extends AbstractController
             $entityManager->persist($place);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Place créé/modifié avec succès');
+            $this->addFlash('success', 'Lieu créé/modifié avec succès');
 
             return $this->redirectToRoute('place_list');
         }
@@ -96,6 +97,37 @@ final class PlaceController extends AbstractController
     {
         $this->placeService->deleteById($id);
         return $this->redirectToRoute('place_list');
+    }
+
+    #[Route('/add-from-modal', name: 'add_from_modal', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function addFromModal(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
+        $place = new Place();
+        $form = $this->createForm(PlaceType::class, $place);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($place);
+            $entityManager->flush();
+
+            return new JsonResponse([
+                'id' => $place->getId(),
+                'name' => $place->getName(),
+            ], 201);
+        }
+
+        $errors = [];
+        foreach ($form->getErrors(true) as $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        return new JsonResponse([
+            'error' => 'Invalid form data',
+            'details' => $errors,
+        ], 400);
     }
 
 }
