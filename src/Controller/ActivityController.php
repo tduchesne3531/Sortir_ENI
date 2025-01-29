@@ -47,9 +47,7 @@ final class ActivityController extends AbstractController
         $this->stateRepository = $stateRepository;
     }
 
-
     #[Route('/', name: 'list', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
     public function list(
         Request $request,
     ): Response
@@ -68,7 +66,7 @@ final class ActivityController extends AbstractController
             $filter->setArchived(false);
         }
         $filter->setUser($user);
-        $activities = $this->stateService->verfiAndChange(
+        $activities = $this->stateService->verifyAndChange(
             $this->activityService->getAllByFilter($filter)
         );
         $sites = $this->siteService->findAllSites();

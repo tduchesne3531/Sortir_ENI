@@ -19,7 +19,7 @@ class ActivitiesFilterType extends AbstractType
         $builder
             ->add('site', EntityType::class, [
                 'class' => Site::class,
-                'choice_label' => 'name', // Remplacez 'name' par le nom du champ à afficher
+                'choice_label' => 'name',
                 'required' => false,
                 'placeholder' => 'Sélectionner un site',
                 'label' => 'Site',
