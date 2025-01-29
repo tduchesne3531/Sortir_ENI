@@ -57,15 +57,16 @@ final class ActivityController extends AbstractController
         $activityFilterForm->handleRequest($request);
 
         $user = $this->getUser();
-        if (!$user instanceof Participant)
-            throw new \LogicException('L’utilisateur connecté n’est pas un participant.');
+            if ($user != null && !$user instanceof Participant)
+                throw new \LogicException('L’utilisateur connecté n’est pas un participant.');
 
         if (!($activityFilterForm->isSubmitted() && $activityFilterForm->isValid())) {
-            $filter->setSite($user->getSite());
+            $filter->setSite($user != null ? $user->getSite() : null);
             $filter->setPast(false);
             $filter->setArchived(false);
         }
-        $filter->setUser($user);
+        $filter->setUser($user != null ? $user : null);
+
         $activities = $this->stateService->verifyAndChange(
             $this->activityService->getAllByFilter($filter)
         );
@@ -74,29 +75,30 @@ final class ActivityController extends AbstractController
         return $this->render('activity/list.html.twig', [
             'form' => $activityFilterForm->createView(),
             'activities' => $activities,
-            'sites' => $sites
+            'sites' => $sites,
+            'user' => $user,
         ]);
     }
 
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
     public function detail(int $id): Response
     {
         $user = $this->getUser();
-        if (!$user instanceof Participant)
+        if ($user != null && !$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour accéder aux détails de cette sortie.');
 
         $activity = $this->activityService->findById($id);
         if (!$activity)
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
 
-        $isUserRegistered = $activity->getParticipants()->contains($user);
+        $isUserRegistered = $activity->getParticipants()->contains($user != null ? $user : new Participant());
         $isManager = $activity->getManager() === $user;
 
         return $this->render('activity/detail.html.twig', [
             'activity' => $activity,
             'isUserRegistered' => $isUserRegistered,
             'isManager' => $isManager,
+            'user' => $user,
         ]);
     }
 

@@ -8,13 +8,15 @@
     <ul>
         <li><strong>Date :</strong> {{ activity.dateStartTime|date('d/m/Y H:i') }}</li>
         <li><strong>Lieu :</strong> {{ activity.place.name }}</li>
-        <li><strong>Organisateur :</strong>
-            {% if activity.manager %}
-                {{ activity.manager.firstname }} {{ activity.manager.lastname }}
-            {% else %}
-                Non défini
-            {% endif %}
-        </li>
+        {% if user is not null %}
+            <li><strong>Organisateur :</strong>
+                {% if activity.manager %}
+                    {{ activity.manager.firstname }} {{ activity.manager.lastname }}
+                {% else %}
+                    Non défini
+                {% endif %}
+            </li>
+        {% endif %}
         <li><strong>Description :</strong> {{ activity.description }}</li>
         <li><strong>Participants :</strong> {{ activity.participants|length }} / {{ activity.maxRegistration }}</li>
         <li><strong>État :</strong> {{ activity.state.name }}</li>
@@ -23,20 +25,23 @@
         {% endif %}
     </ul>
 
-    <h2>Participants inscrits</h2>
-    {% if activity.participants|length > 0 %}
-        <ul>
-            {% for participant in activity.participants %}
-                <li>{{ participant.firstname }} {{ participant.lastname }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun participant inscrit.</p>
+    {% if user is not null %}
+        <h2>Participants inscrits</h2>
+        {% if activity.participants|length > 0 %}
+            <ul>
+                {% for participant in activity.participants %}
+                    <li>{{ participant.firstname }} {{ participant.lastname }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun participant inscrit.</p>
+        {% endif %}
     {% endif %}
 
     <div class="actions">
         {% if isUserRegistered %}
-            <form action="{{ path('activity_unregister', { id: activity.id }) }}" method="post" style="display: inline;">
+            <form action="{{ path('activity_unregister', { id: activity.id }) }}" method="post"
+                  style="display: inline;">
                 <button type="submit" class="btn btn-danger">Se désinscrire</button>
             </form>
         {% elseif activity.state.name == 'Ouverte' %}
@@ -48,11 +53,13 @@
         {% if isManager or is_granted('ROLE_ADMIN') %}
             <a href="{{ path('activity_edit', { id: activity.id }) }}" class="btn btn-warning">Modifier</a>
             {% if activity.state.name == 'Créée' %}
-{#                TODO Modifier cette partie pour pointer vers la méthode de modification de l'état#}
+                {#                TODO Modifier cette partie pour pointer vers la méthode de modification de l'état #}
                 <a href="{{ path('activity_list', { id: activity.id }) }}" class="btn btn-success">Publier</a>
             {% endif %}
             {% if activity.state.name != 'Annulée' and activity.state.name not in ['Activité en cours', 'Passée'] %}
-                <button type="button" class="btn btn-danger bg-red-600 text-white px-4 py-2 rounded" onclick="openModal()">Annuler</button>
+                <button type="button" class="btn btn-danger bg-red-600 text-white px-4 py-2 rounded"
+                        onclick="openModal()">Annuler
+                </button>
             {% endif %}
         {% endif %}
     </div>
