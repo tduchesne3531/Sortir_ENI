@@ -27,7 +27,7 @@ class StateFixtures extends Fixture
             $state->setUpdatedAt(new \DateTime());
 
             $manager->persist($state);
-            $this->addReference('state_' . $index, $state);
+            $this->addReference('state_' . ($index+1), $state);
         }
 
         $manager->flush();
