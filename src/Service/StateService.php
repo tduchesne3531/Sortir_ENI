@@ -29,7 +29,7 @@ class StateService
      * @param Activity[] $activities An array of Activity objects.
      * @return Activity[] An array of Activity objects with updated states.
      */
-    public function verfiAndChange(array $activities): array
+    public function verifyAndChange(array $activities): array
     {
         $now = new \DateTime();
         foreach ($activities as $activity) {
