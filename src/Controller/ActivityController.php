@@ -7,6 +7,7 @@ use App\dto\ActivityFilter;
 use App\Entity\Activity;
 use App\Entity\Participant;
 use App\Entity\Place;
+use App\Entity\Site;
 use App\Entity\State;
 use App\Form\ActivitiesFilterType;
 use App\Form\ActivityType;
@@ -64,7 +65,6 @@ final class ActivityController extends AbstractController
                 throw new \LogicException('L’utilisateur connecté n’est pas un participant.');
 
         if (!($activityFilterForm->isSubmitted() && $activityFilterForm->isValid())) {
-            $filter->setSite($user != null ? $user->getSite() : null);
             $filter->setPast(false);
             $filter->setArchived(false);
         }
@@ -73,7 +73,10 @@ final class ActivityController extends AbstractController
         $activities = $this->stateService->verifyAndChange(
             $this->activityService->getAllByFilter($filter)
         );
+        $sitesVide = new Site();
+        $sitesVide->setName('Tous les sites');
         $sites = $this->siteService->findAllSites();
+        $sites[] = $sitesVide;
 
         return $this->render('activity/list.html.twig', [
             'form' => $activityFilterForm->createView(),
@@ -179,7 +182,7 @@ final class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
@@ -236,7 +239,7 @@ final class ActivityController extends AbstractController
         return $this->redirectToRoute('activity_detail', ['id' => $id]);
     }
 
-    #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function cancel(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
@@ -249,6 +252,12 @@ final class ActivityController extends AbstractController
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
         if ($activity->getManager() !== $user && !$this->isGranted('ROLE_ADMIN'))
             throw $this->createAccessDeniedException('Seul le créateur ou un administrateur peut annuler cette sortie.');
+
+        if ($activity->getState()->getId() === 6) {
+            $activity->setState($this->stateRepository->find(2));
+            $entityManager->flush();
+            return $this->redirectToRoute('activity_detail', ['id' => $id]);
+        }
 
         $cancelReason = $request->request->get('cancelReason');
         if (empty($cancelReason)) {
