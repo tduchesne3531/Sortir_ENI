@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Site;
 use App\dto\ActivityFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,14 +16,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActivitiesFilterType extends AbstractType
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $sites = $this->entityManager->getRepository(Site::class)->findAll();
+        $choices = ['Tous les sites' => null];
+        foreach ($sites as $site) {
+            $choices[$site->getName()] = $site;
+        }
         $builder
-            ->add('site', EntityType::class, [
-                'class' => Site::class,
-                'choice_label' => 'name',
+            ->add('site', ChoiceType::class, [
+                'choices' => $choices,
                 'required' => false,
-                'placeholder' => 'Sélectionner un site',
+                'placeholder' => "Sélectionner un site",
                 'label' => 'Site',
             ])
             ->add('search', SearchType::class, [

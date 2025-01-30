@@ -7,6 +7,7 @@ use App\dto\ActivityFilter;
 use App\Entity\Activity;
 use App\Entity\Participant;
 use App\Entity\Place;
+use App\Entity\Site;
 use App\Entity\State;
 use App\Form\ActivitiesFilterType;
 use App\Form\ActivityType;
@@ -32,19 +33,22 @@ final class ActivityController extends AbstractController
     private SiteService $siteService;
     private StateService $stateService;
     private StateRepository $stateRepository;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @param ActivityService $activityService
      * @param SiteService $siteService
      * @param StateService $stateService
      * @param StateRepository $stateRepository
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository, EntityManagerInterface $entityManager)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
         $this->stateService = $stateService;
         $this->stateRepository = $stateRepository;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'list', methods: ['GET', 'POST'])]
@@ -61,7 +65,6 @@ final class ActivityController extends AbstractController
                 throw new \LogicException('L’utilisateur connecté n’est pas un participant.');
 
         if (!($activityFilterForm->isSubmitted() && $activityFilterForm->isValid())) {
-            $filter->setSite($user != null ? $user->getSite() : null);
             $filter->setPast(false);
             $filter->setArchived(false);
         }
@@ -70,14 +73,26 @@ final class ActivityController extends AbstractController
         $activities = $this->stateService->verifyAndChange(
             $this->activityService->getAllByFilter($filter)
         );
-        $sites = $this->siteService->findAllSites();
+
 
         return $this->render('activity/list.html.twig', [
             'form' => $activityFilterForm->createView(),
             'activities' => $activities,
-            'sites' => $sites,
             'user' => $user,
         ]);
+    }
+
+    #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
+    public function publish(int $id): Response
+    {
+        $activity = $this->activityService->getById($id);
+        if (!$activity)
+            throw $this->createNotFoundException("Activity with ID $id not found.");
+
+        $activity->setState($this->stateRepository->find(2));
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('activity_list');
     }
 
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -87,7 +102,7 @@ final class ActivityController extends AbstractController
         if ($user != null && !$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour accéder aux détails de cette sortie.');
 
-        $activity = $this->activityService->findById($id);
+        $activity = $this->activityService->getById($id);
         if (!$activity)
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
 
@@ -140,7 +155,7 @@ final class ActivityController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
         $activityForm = $this->createForm(ActivityType::class, $activity);
         $activityForm->handleRequest($request);
 
@@ -163,11 +178,11 @@ final class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $activity = $this->activityService->findById($id);
+        $activity = $this->activityService->getById($id);
         $entityManager->remove($activity);
         $entityManager->flush();
 
@@ -184,7 +199,7 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour vous inscrire.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
 
         if ($activity->getParticipants()->contains($user)) {
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
@@ -207,7 +222,7 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour vous désinscrire.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
 
         if ($activity->getParticipants()->contains($user)) {
             $activity->removeParticipant($user);
@@ -220,7 +235,7 @@ final class ActivityController extends AbstractController
         return $this->redirectToRoute('activity_detail', ['id' => $id]);
     }
 
-    #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function cancel(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
@@ -228,11 +243,17 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être connecté en tant que participant pour annuler une sortie.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
         if (!$activity)
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
         if ($activity->getManager() !== $user && !$this->isGranted('ROLE_ADMIN'))
             throw $this->createAccessDeniedException('Seul le créateur ou un administrateur peut annuler cette sortie.');
+
+        if ($activity->getState()->getId() === 6) {
+            $activity->setState($this->stateRepository->find(2));
+            $entityManager->flush();
+            return $this->redirectToRoute('activity_detail', ['id' => $id]);
+        }
 
         $cancelReason = $request->request->get('cancelReason');
         if (empty($cancelReason)) {

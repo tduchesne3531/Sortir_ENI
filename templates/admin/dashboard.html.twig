@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Dashboard Administrateur</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Carte Participants -->
+            <a href="{{ path('participant_list') }}" class="block bg-white shadow-lg rounded-lg p-6 hover:bg-gray-100">
+                <h2 class="text-xl font-semibold">Gestion des Participants</h2>
+                <p class="text-gray-600">Accédez à la gestion des utilisateurs.</p>
+            </a>
+
+            <!-- Carte Villes -->
+            <a href="{{ path('city_list') }}" class="block bg-white shadow-lg rounded-lg p-6 hover:bg-gray-100">
+                <h2 class="text-xl font-semibold">Gestion des Villes</h2>
+                <p class="text-gray-600">Accédez à la gestion des villes.</p>
+            </a>
+
+            <!-- Carte Lieux -->
+            <a href="{{ path('place_list') }}" class="block bg-white shadow-lg rounded-lg p-6 hover:bg-gray-100">
+                <h2 class="text-xl font-semibold">Gestion des Lieux</h2>
+                <p class="text-gray-600">Accédez à la gestion des lieux.</p>
+            </a>
+        </div>
+    </div>
+{% endblock %}

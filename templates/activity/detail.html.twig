@@ -90,7 +90,7 @@
 					<span class="material-symbols-rounded text-3xl">edit</span>
 				</a>
 				{% if activity.state.name == 'Créée' %}
-					<a href="{{ path('activity_list', { id: activity.id }) }}" class="text-green-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
+					<a href="{{ path('activity_publish', { id: activity.id }) }}" class="text-green-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
 						<span class="material-symbols-rounded text-3xl">publish</span>
 						Publier
 					</a>
@@ -99,6 +99,11 @@
 					<button type="button" class="text-red-600 px-4 py-2 rounded-full hover:text-red-700 transition flex items-center gap-2 border-none" onclick="openModal()">
 						<span class="material-symbols-rounded text-3xl">cancel</span>
 					</button>
+				{% else %}
+					<a href="{{ path('activity_cancel', { id: activity.id }) }}" class="text-cyan-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
+						<span class="material-symbols-rounded text-3xl"></span>
+						Ouvrir
+					</a>
 				{% endif %}
 
 				<a href="{{ path('activity_list') }}" class="text-cyan-600 px-6 py-2 hover:text-cyan-700 transition self-center">
