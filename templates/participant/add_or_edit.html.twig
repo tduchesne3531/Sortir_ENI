@@ -2,38 +2,36 @@
 
 {% block body %}
 
-    {{ form_errors(participantForm) }}
+	<h1 class="text-3xl font-bold text-center mb-8">
+		{{ mode == 'edit' ? 'Modifier ' ~ participant.firstName ~ ' ' ~ participant.lastName : (mode == 'add' ? 'Ajouter un participant' : participant.firstName ~ ' ' ~ participant.lastName) }}
+	</h1>
 
-    <h1 class="text-3xl font-bold text-center mb-8">
-        {{ mode == 'edit' ? 'Modifier ' ~ participant.firstName ~ ' ' ~ participant.lastName : (mode == 'add' ? 'Ajouter un participant' : participant.firstName ~ ' ' ~ participant.lastName) }}
-    </h1>
+	<section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
+		{{ form_start(participantForm, {'attr': {'class': 'space-y-4'}}) }}
 
-    <section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
-        {{ form_start(participantForm, {'attr': {'class': 'space-y-4'}}) }}
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			{% for child in participantForm %}
+				<div>
+					{% if child.vars.block_prefixes[1] != 'hidden' %}
+						{{ form_label(child) }}
+						{{ form_widget(child) }}
+						{{ form_errors(child) }}
+					{% endif %}
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {% for child in participantForm %}
-                <div>
-                    {% if child.vars.block_prefixes[1] != 'hidden' %}
-                        {{ form_label(child, label|default(null), { 'label_attr': { 'class': 'block text-gray-700 font-semibold mb-1' } }) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
-                    {% endif %}
+				</div>
+			{% endfor %}
+		</div>
 
-                </div>
-            {% endfor %}
-        </div>
+		<div class="flex justify-end mt-6">
+			<button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">
+				{{ (mode == 'add') ? 'Créer' : 'Modifier' }}
+			</button>
+			<a href="{{ path('participant_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">
+				Back to list
+			</a>
+		</div>
 
-        <div class="flex justify-end mt-6">
-            <button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">
-                {{ (mode == 'add') ? 'Créer' : 'Modifier' }}
-            </button>
-            <a href="{{ path('participant_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">
-                Back to list
-            </a>
-        </div>
-
-        {{ form_end(participantForm) }}
-    </section>
+		{{ form_end(participantForm) }}
+	</section>
 
 {% endblock %}

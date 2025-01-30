@@ -12,3 +12,42 @@
         </ul>
     {% endif %}
 {% endblock %}
+
+{% block form_label %}
+        {% if not compound %}
+            <label for="{{ id }}" class="block text-gray-700 font-semibold mb-1">{{ label|trans({}, translation_domain) }}</label>
+        {% else %}
+            <label class="block text-gray-700 font-semibold mb-1">{{ label|trans({}, translation_domain) }}</label>
+        {% endif %}
+{% endblock %}
+
+{% block choice_widget_expanded %}
+    <div class="flex gap-4">
+        {% for child in form %}
+            <div class="flex items-center gap-2">
+                {{ form_widget(child, { 'attr': { 'class': 'w-4 h-4' } }) }}
+                {{ form_label(child, null, { 'label_attr': { 'class': 'text-gray-700 font-medium' } }) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block choice_widget_collapsed %}
+    <select {{ block('widget_attributes') }} class="w-full border-gray-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 p-2">
+        {% for group_label, choices in form.vars.choices %}
+            {% if choices is iterable %}
+                <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                    {% for choice in choices %}
+                        <option value="{{ choice.value }}" {% if choice.data is same as(value) %}selected{% endif %}>
+                            {{ choice.label }}
+                        </option>
+                    {% endfor %}
+                </optgroup>
+            {% else %}
+                <option value="{{ choices.value }}" {% if choices.data is same as(value) %}selected{% endif %}>
+                    {{ choices.label }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+{% endblock %}

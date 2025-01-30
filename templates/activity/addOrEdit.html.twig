@@ -1,83 +1,71 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ activity.id ? 'Modifier une sortie' : 'Créer une sortie' }}</h1>
+	<h1 class="text-3xl font-bold text-center mb-8">{{ activity.id ? 'Modifier une sortie' : 'Créer une sortie' }}</h1>
 
-    {% if form.vars.errors|length > 0 %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for error in form.vars.errors %}
-                    <li>{{ error.message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+	<section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
 
-    {{ form_start(form) }}
+		{{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
 
-    <div class="form-group">
-        {{ form_label(form.name) }}
-        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.name) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.name) }}
+			{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.name) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.dateStartTime) }}
-        {{ form_widget(form.dateStartTime, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.dateStartTime) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.dateStartTime) }}
+			{{ form_widget(form.dateStartTime, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.dateStartTime) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.registrationDeadLine) }}
-        {{ form_widget(form.registrationDeadLine, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.registrationDeadLine) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.registrationDeadLine) }}
+			{{ form_widget(form.registrationDeadLine, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.registrationDeadLine) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.duration) }}
-        {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.duration) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.duration) }}
+			{{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.duration) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.maxRegistration) }}
-        {{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.maxRegistration) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.maxRegistration) }}
+			{{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.maxRegistration) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.description) }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.description) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.description) }}
+			{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.description) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.site) }}
-        {{ form_widget(form.site, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.site) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.site) }}
+			{{ form_widget(form.site, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.site) }}
+		</div>
 
-    <div class="form-group">
-        {{ form_label(form.place) }}
-        <div class="flex items-center space-x-2">
-            {{ form_widget(form.place, {'attr': {'class': 'form-select w-full'}}) }}
-            <button type="button" class="btn btn-secondary px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" data-modal-target="#addPlaceModal">
-                Ajouter un lieu
-            </button>
-        </div>
-        {{ form_errors(form.place) }}
-    </div>
+		<div class="form-group">
+			{{ form_label(form.place) }}
+			<div class="flex items-center space-x-2">
+				{{ form_widget(form.place, {'attr': {'class': 'form-select w-full'}}) }}
+				<button type="button" class="text-cyan-600 px-6 py-2 border-2 border-cyan-600 rounded-full hover:bg-cyan-600 transition hover:text-white" data-modal-target="#addPlaceModal">
+					Ajouter un lieu
+				</button>
+			</div>
+			{{ form_errors(form.place) }}
+		</div>
 
-    <button type="submit" class="btn btn-primary" name="state" value="1">
-        Enregistrer
-    </button>
+		<button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition" name="state" value="1">
+			Enregistrer
+		</button>
+		<a href="{{ path('activity_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">Annuler</a>
 
-    <button type="submit" class="btn btn-primary" name="state" value="2">
-        Publier
-    </button>
-    <a href="{{ path('activity_list') }}" class="btn btn-secondary">Annuler</a>
-
-    {{ form_end(form) }}
-
-    {{ include('components/placeModal.html.twig') }}
+		{{ form_end(form) }}
+	</section>
+	{{ include('components/placeModal.html.twig') }}
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <h1 class="text-3xl">{{ participant.firstName }} | {{ participant.lastName }} profile</h1>
+    <h1 class="text-3xl">{{ participant.firstName }} {{ participant.lastName }} profile</h1>
 
     <article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 mt-4">
         {% if (participant.photo) %}
