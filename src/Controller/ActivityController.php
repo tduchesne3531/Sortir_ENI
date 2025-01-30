@@ -73,15 +73,11 @@ final class ActivityController extends AbstractController
         $activities = $this->stateService->verifyAndChange(
             $this->activityService->getAllByFilter($filter)
         );
-        $sitesVide = new Site();
-        $sitesVide->setName('Tous les sites');
-        $sites = $this->siteService->findAllSites();
-        $sites[] = $sitesVide;
+
 
         return $this->render('activity/list.html.twig', [
             'form' => $activityFilterForm->createView(),
             'activities' => $activities,
-            'sites' => $sites,
             'user' => $user,
         ]);
     }

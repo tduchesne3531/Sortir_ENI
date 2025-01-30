@@ -22,10 +22,6 @@ class ActivityFilter {
      */
     private ?Participant $user = null;
 
-
-
-
-
     public function getSite(): ?Site
     {
         return $this->site;

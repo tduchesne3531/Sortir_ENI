@@ -49,6 +49,14 @@
 			{{ form_errors(form.site) }}
 		</div>
 
+		{% if is_granted('ROLE_ADMIN') %}
+			<div class="form-group">
+				{{ form_label(form.state) }}
+				{{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
+				{{ form_errors(form.state) }}
+			</div>
+		{% endif %}
+
 		<div class="form-group">
 			{{ form_label(form.place) }}
 			<div class="flex items-center space-x-2">

@@ -50,6 +50,12 @@ class ActivityType extends AbstractType
                 'label' => 'Lieu',
                 'placeholder' => 'Choisissez un lieu',
                 'required' => true,
+            ])
+            ->add('state', EntityType::class, [
+                'class' => State::class,
+                'choice_label' => 'name',
+                'label' => 'État de la sortie',
+                'placeholder' => 'Sélectionnez un état'
             ]);
 
     }
