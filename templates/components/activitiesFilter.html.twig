@@ -1,4 +1,4 @@
-{#{% block title %}Filtrer les activités{% endblock %}#}
+{# {% block title %}Filtrer les activités{% endblock %} #}
 
 {% block body %}
     <div class="container mt-4">
@@ -30,42 +30,45 @@
                 {{ form_errors(form.endDate) }}
             </div>
 
-            <div class="col-md-4">
-                <div class="form-check">
-                    {{ form_widget(form.organizer, { 'attr': { 'class': 'form-check-input' } }) }}
-                    {{ form_label(form.organizer, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
-                    {{ form_errors(form.organizer) }}
+            {% if user is not null %}
+                <div class="col-md-4">
+                    <div class="form-check">
+                        {{ form_widget(form.organizer, { 'attr': { 'class': 'form-check-input' } }) }}
+                        {{ form_label(form.organizer, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                        {{ form_errors(form.organizer) }}
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="form-check">
-                    {{ form_widget(form.registered, { 'attr': { 'class': 'form-check-input' } }) }}
-                    {{ form_label(form.registered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
-                    {{ form_errors(form.registered) }}
+                <div class="col-md-4">
+                    <div class="form-check">
+                        {{ form_widget(form.registered, { 'attr': { 'class': 'form-check-input' } }) }}
+                        {{ form_label(form.registered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                        {{ form_errors(form.registered) }}
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="form-check">
-                    {{ form_widget(form.notRegistered, { 'attr': { 'class': 'form-check-input' } }) }}
-                    {{ form_label(form.notRegistered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
-                    {{ form_errors(form.notRegistered) }}
+                <div class="col-md-4">
+                    <div class="form-check">
+                        {{ form_widget(form.notRegistered, { 'attr': { 'class': 'form-check-input' } }) }}
+                        {{ form_label(form.notRegistered, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                        {{ form_errors(form.notRegistered) }}
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="form-check">
-                    {{ form_widget(form.past, { 'attr': { 'class': 'form-check-input' } }) }}
-                    {{ form_label(form.past, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
-                    {{ form_errors(form.past) }}
+
+                <div class="col-md-4">
+                    <div class="form-check">
+                        {{ form_widget(form.past, { 'attr': { 'class': 'form-check-input' } }) }}
+                        {{ form_label(form.past, null, { 'label_attr': { 'class': 'form-check-label' } }) }}
+                        {{ form_errors(form.past) }}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
 
         <button type="submit" class="btn btn-primary filter-button">
             Rechercher
         </button>
-        {{ form_end(form) }}
+        {#        {{ form_end(form) }} #}
     </div>
 {% endblock %}
