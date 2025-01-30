@@ -1,57 +1,94 @@
 {% extends 'base.html.twig' %}
 
-{#{% block stylesheets %}#}
-{#    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">#}
-{#{% endblock %}#}
-
-{% block title %}Liste des sorties{% endblock %}
+{% block title %}Liste des sorties
+{% endblock %}
 
 {% block body %}
-    <h1 class="text-center my-4">Liste des sorties</h1>
+	<h1 class="text-3xl font-bold text-center mb-8">Liste des sorties</h1>
 
-    {{ include('components/activitiesFilter.html.twig') }}
+	{{ include('components/activitiesFilter.html.twig') }}
 
-    {% if activities is not empty %}
-        <div id="activities" class="row row-cols-1 row-cols-md-3 g-4">
-            {% for activity in activities %}
-                {% set isUserRegistered = false %}
-                {% if app.user %}
-                    {% for participant in activity.participants %}
-                        {% if participant.id == app.user.id %}
-                            {% set isUserRegistered = true %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <div class="col activity-card"
-                     data-name="{{ activity.name|lower }}"
-                     data-date="{{ activity.dateStartTime|date('Y-m-d') }}"
-                     data-site="{{ activity.site.id }}"
-                     data-participation="{{ isUserRegistered ? 'participating' : 'not_participating' }}">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ activity.name }}</h5>
-                            <p class="card-text">
-                                <strong>Date :</strong> {{ activity.dateStartTime|date('d/m/Y H:i') }}<br>
-                                <strong>Lieu :</strong> {{ activity.place.name }}<br>
-                                <strong>Site :</strong> {{ activity.site.name }}<br>
-                                <strong>Organisateur :</strong>
-                                {% if activity.manager %}
-                                {{ activity.manager.firstname }} {{ activity.manager.lastname }}
-                            {% else %}
-                                Non défini
-                                {% endif %}<br>
-                                <strong>Participants :</strong>
-                                {{ activity.participants|length }} / {{ activity.maxRegistration }}
-                            </p>
-                            <a href="{{ path('activity_detail', { id: activity.id }) }}"
-                               class="btn btn-primary">Détails</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+	{% if activities is not empty %}
+		<section id="activities" class="participants-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
 
-    {% else %}
-        <p class="text-center">Aucune sortie disponible pour le moment.</p>
-    {% endif %}
+			{% for activity in activities %}
+				{% set isUserRegistered = false %}
+				{% if app.user %}
+					{% for participant in activity.participants %}
+						{% if participant.id == app.user.id %}
+							{% set isUserRegistered = true %}
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-gray-500" data-name="{{ activity.name|lower }}" data-date="{{ activity.dateStartTime|date('Y-m-d') }}" data-site="{{ activity.site.id }}" data-participation="{{ isUserRegistered ? 'participating' : 'not_participating' }}">
+					<a href="{{ path('activity_detail', { id: activity.id }) }}" class="m-0 p-0">
+						<h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ activity.name }}">
+							{{ activity.name }}
+						</h2>
+
+						<ul class="text-gray-600 mb-6 space-y-2">
+							<li>
+								<span class="font-semibold flex items-center gap-2">
+									<span class="material-symbols-rounded text-2xl">calendar_today</span>
+									Date:
+								</span>
+								{{ activity.dateStartTime|date('d/m/Y H:i') }}
+							</li>
+							<li>
+								<span class="font-semibold flex items-center gap-2">
+									<span class="material-symbols-rounded text-2xl">location_on</span>
+									Lieu:
+								</span>
+								{{ activity.place.name }}
+							</li>
+							<li>
+								<span class="font-semibold flex items-center gap-2">
+									<span class="material-symbols-rounded text-2xl">business</span>
+									Site:
+								</span>
+								{{ activity.site.name }}
+							</li>
+							<li>
+								<span class="font-semibold flex items-center gap-2">
+									<span class="material-symbols-rounded text-2xl">person</span>
+									Organisateur:
+								</span>
+								{% if activity.manager %}
+									{{ activity.manager.firstname }}
+									{{ activity.manager.lastname }}
+								{% else %}
+									Non défini
+								{% endif %}
+							</li>
+							<li>
+								<span class="font-semibold flex items-center gap-2">
+									<span class="material-symbols-rounded text-2xl">groups</span>
+									Participants:
+								</span>
+								{{ activity.participants|length }}
+								/
+								{{ activity.maxRegistration }}
+							</li>
+						</ul>
+
+						<div class="flex flex-wrap justify-center gap-4">
+							<a href="{{ path('activity_detail', { id: activity.id }) }}" class="text-cyan-600 px-4 py-2 rounded-full hover:text-cyan-700 transition items-center gap-2 flex">
+								<span class="material-symbols-rounded text-3xl">info</span>
+							</a>
+							<a href="{{ path('activity_edit', { id: activity.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition items-center gap-2 flex">
+								<span class="material-symbols-rounded text-3xl">edit</span>
+							</a>
+							<a href="{{ path('activity_delete', { id: activity.id }) }}" class="text-red-500 px-4 py-2 rounded-full hover:text-red-700 transition items-center gap-2 flex">
+								<span class="material-symbols-rounded text-3xl">delete</span>
+							</a>
+						</div>
+					</a>
+				</article>
+
+			{% endfor %}
+		</section>
+
+	{% else %}
+		<p class="text-center">Aucune sortie disponible pour le moment.</p>
+	{% endif %}
 {% endblock %}

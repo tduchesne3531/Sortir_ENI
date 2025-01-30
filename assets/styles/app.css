@@ -26,6 +26,6 @@ h1, h2, h3, h4, h5, h6 {
 	left: -0.45rem;
 }
 
-input, button {
+input, button, textarea {
 	@apply border-2 border-gray-300 rounded-lg p-2 focus:border-cyan-600 focus:outline-none;
 }
