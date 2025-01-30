@@ -12,6 +12,13 @@
             </a>
         </li>
         {% if app.user %}
+            {% if is_granted('ROLE_ADMIN') %}
+            <li>
+                <a href="{{ path('admin_dashboard') }}" class="hover:text-cyan-700">
+                    <span class="material-symbols-rounded text-3xl">admin_panel_settings</span>
+                </a>
+            </li>
+            {% endif %}
             <li>
                 <a href="{{ path('activity_add') }}" class="hover:text-cyan-700">
                     <span class="material-symbols-rounded text-3xl">add_circle</span>
@@ -44,6 +51,14 @@
             </a>
         </li>
         {% if app.user %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <li>
+                    <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-2 hover:text-cyan-800">
+                        <span class="material-symbols-rounded text-3xl">admin_panel_settings</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            {% endif %}
             <li>
                 <a href="{{ path('activity_add') }}" class="flex items-center gap-2 hover:text-cyan-800 transition">
                     Activity <span class="material-symbols-rounded text-3xl">add_circle</span>
