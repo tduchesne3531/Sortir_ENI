@@ -13,7 +13,7 @@ class ActivityService
 
     }
 
-        public function findById(int $id)
+        public function getById(int $id)
         {
             return $this->sortieRepository->find($id);
         }

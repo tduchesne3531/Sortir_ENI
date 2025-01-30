@@ -32,19 +32,22 @@ final class ActivityController extends AbstractController
     private SiteService $siteService;
     private StateService $stateService;
     private StateRepository $stateRepository;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @param ActivityService $activityService
      * @param SiteService $siteService
      * @param StateService $stateService
      * @param StateRepository $stateRepository
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository)
+    public function __construct(ActivityService $activityService, SiteService $siteService, StateService $stateService, StateRepository $stateRepository, EntityManagerInterface $entityManager)
     {
         $this->activityService = $activityService;
         $this->siteService = $siteService;
         $this->stateService = $stateService;
         $this->stateRepository = $stateRepository;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'list', methods: ['GET', 'POST'])]
@@ -80,6 +83,19 @@ final class ActivityController extends AbstractController
         ]);
     }
 
+    #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
+    public function publish(int $id): Response
+    {
+        $activity = $this->activityService->getById($id);
+        if (!$activity)
+            throw $this->createNotFoundException("Activity with ID $id not found.");
+
+        $activity->setState($this->stateRepository->find(2));
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('activity_list');
+    }
+
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function detail(int $id): Response
     {
@@ -87,7 +103,7 @@ final class ActivityController extends AbstractController
         if ($user != null && !$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour accéder aux détails de cette sortie.');
 
-        $activity = $this->activityService->findById($id);
+        $activity = $this->activityService->getById($id);
         if (!$activity)
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
 
@@ -140,7 +156,7 @@ final class ActivityController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
         $activityForm = $this->createForm(ActivityType::class, $activity);
         $activityForm->handleRequest($request);
 
@@ -167,7 +183,7 @@ final class ActivityController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $activity = $this->activityService->findById($id);
+        $activity = $this->activityService->getById($id);
         $entityManager->remove($activity);
         $entityManager->flush();
 
@@ -184,7 +200,7 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour vous inscrire.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
 
         if ($activity->getParticipants()->contains($user)) {
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
@@ -207,7 +223,7 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être un participant pour vous désinscrire.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
 
         if ($activity->getParticipants()->contains($user)) {
             $activity->removeParticipant($user);
@@ -228,7 +244,7 @@ final class ActivityController extends AbstractController
         if (!$user instanceof Participant)
             throw $this->createAccessDeniedException('Vous devez être connecté en tant que participant pour annuler une sortie.');
 
-        $activity = $this->activityService->findByID($id);
+        $activity = $this->activityService->getById($id);
         if (!$activity)
             throw $this->createNotFoundException('Cette sortie n\'existe pas.');
         if ($activity->getManager() !== $user && !$this->isGranted('ROLE_ADMIN'))
