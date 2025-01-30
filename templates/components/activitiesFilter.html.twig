@@ -69,6 +69,9 @@
         <button type="submit" class="btn btn-primary filter-button">
             Rechercher
         </button>
+        <button type="reset" class="btn btn-secondary filter-button" onclick="window.location.href='{{ path('activity_list') }}'">
+            Réinitialiser les filtres
+        </button>
         {#        {{ form_end(form) }} #}
     </div>
 {% endblock %}
