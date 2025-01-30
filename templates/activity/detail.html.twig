@@ -71,14 +71,16 @@
         <div class="flex flex-wrap justify-center gap-4 mt-6">
             {% if isUserRegistered %}
                 <form action="{{ path('activity_unregister', { id: activity.id }) }}" method="post">
-                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition flex items-center gap-2">
+                    <button type="submit"
+                            class="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition flex items-center gap-2">
                         <span class="material-symbols-rounded text-2xl">logout</span>
                         Se désinscrire
                     </button>
                 </form>
             {% elseif activity.state.name == 'Ouverte' %}
                 <form action="{{ path('activity_register', { id: activity.id }) }}" method="post">
-                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition flex items-center gap-2">
+                    <button type="submit"
+                            class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition flex items-center gap-2">
                         <span class="material-symbols-rounded text-2xl">how_to_reg</span>
                         S'inscrire
                     </button>
@@ -86,22 +88,33 @@
             {% endif %}
 
             {% if isManager or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('activity_edit', { id: activity.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition flex items-center gap-2">
+                <a href="{{ path('activity_edit', { id: activity.id }) }}"
+                   class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition flex items-center gap-2">
                     <span class="material-symbols-rounded text-3xl">edit</span>
                 </a>
                 {% if activity.state.name == 'Créée' %}
-                    <a href="{{ path('activity_publish', { id: activity.id }) }}" class="text-green-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
+                    <a href="{{ path('activity_publish', { id: activity.id }) }}"
+                       class="text-green-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
                         <span class="material-symbols-rounded text-3xl">publish</span>
                         Publier
                     </a>
                 {% endif %}
                 {% if activity.state.name != 'Annulée' and activity.state.name not in ['Activité en cours', 'Passée'] %}
-                    <button type="button" class="text-red-600 px-4 py-2 rounded-full hover:text-red-700 transition flex items-center gap-2 border-none" onclick="openModal()">
+                    <button type="button"
+                            class="text-red-600 px-4 py-2 rounded-full hover:text-red-700 transition flex items-center gap-2 border-none"
+                            onclick="openModal()">
                         <span class="material-symbols-rounded text-3xl">cancel</span>
                     </button>
+                {% else %}
+                    <a href="{{ path('activity_cancel', { id: activity.id }) }}"
+                       class="text-cyan-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
+                        <span class="material-symbols-rounded text-3xl"></span>
+                        Ouvrir
+                    </a>
                 {% endif %}
 
-                <a href="{{ path('activity_list') }}" class="text-cyan-600 px-6 py-2 hover:text-cyan-700 transition self-center">
+                <a href="{{ path('activity_list') }}"
+                   class="text-cyan-600 px-6 py-2 hover:text-cyan-700 transition self-center">
                     Back to list
                 </a>
             {% endif %}
