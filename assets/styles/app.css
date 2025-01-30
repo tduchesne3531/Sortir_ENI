@@ -14,7 +14,7 @@ body {
 	@apply min-h-screen w-full p-0 m-0 flex flex-col items-center;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, th {
 	font-family: 'Yatra One', cursive;
 }
 

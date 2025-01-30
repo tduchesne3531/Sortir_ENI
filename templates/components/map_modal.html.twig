@@ -1,0 +1,12 @@
+<!-- Modale Leaflet -->
+<div id="mapModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-lg">
+        <div class="flex flex-row items-center justify-between mb-4">
+            <h2 id="modalTitle" class="text-xl font-bold text-gray-800"></h2>
+            <button onclick="closeMapModal()" class="bg-red-600 text-white px-3 border-none rounded-full hover:bg-red-700">
+                <span class="material-symbols-rounded text-2xl align-middle">close</span>
+            </button>
+        </div>
+        <div id="mapContainer" class="w-full h-64 rounded-2xl"></div>
+    </div>
+</div>
