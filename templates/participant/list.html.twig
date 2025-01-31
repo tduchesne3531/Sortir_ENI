@@ -7,6 +7,10 @@
 {% block body %}
 	<h1 class="text-center text-3xl font-bold mb-8">Liste de tous les participants !</h1>
 
+	<div class="flex justify-end mt-6">
+		<a href="{{ path('participant_add') }}" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">Nouveau participant</a>
+	</div>
+
 	<section class="participants-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
 			{% for participant in participants %}
 				<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-gray-500">
