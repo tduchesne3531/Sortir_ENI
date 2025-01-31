@@ -4,76 +4,88 @@
 	<h1 class="text-3xl font-bold text-center mb-8">{{ activity.id ? 'Modifier une sortie' : 'Créer une sortie' }}</h1>
 
 	<section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
+		{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
-		{{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			<div class="space-y-4">
+				<div>
+					{{ form_label(form.name, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.name, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
 
-		<div class="form-group">
-			{{ form_label(form.name) }}
-			{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.name) }}
-		</div>
+				<div>
+					{{ form_label(form.dateStartTime, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.dateStartTime, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.dateStartTime, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
 
-		<div class="form-group">
-			{{ form_label(form.dateStartTime) }}
-			{{ form_widget(form.dateStartTime, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.dateStartTime) }}
-		</div>
+				<div>
+					{{ form_label(form.registrationDeadLine, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.registrationDeadLine, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.registrationDeadLine, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
 
-		<div class="form-group">
-			{{ form_label(form.registrationDeadLine) }}
-			{{ form_widget(form.registrationDeadLine, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.registrationDeadLine) }}
-		</div>
-
-		<div class="form-group">
-			{{ form_label(form.duration) }}
-			{{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.duration) }}
-		</div>
-
-		<div class="form-group">
-			{{ form_label(form.maxRegistration) }}
-			{{ form_widget(form.maxRegistration, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.maxRegistration) }}
-		</div>
-
-		<div class="form-group">
-			{{ form_label(form.description) }}
-			{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.description) }}
-		</div>
-
-		<div class="form-group">
-			{{ form_label(form.site) }}
-			{{ form_widget(form.site, {'attr': {'class': 'form-control'}}) }}
-			{{ form_errors(form.site) }}
-		</div>
-
-		{% if is_granted('ROLE_ADMIN') %}
-			<div class="form-group">
-				{{ form_label(form.state) }}
-				{{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
-				{{ form_errors(form.state) }}
+				<div>
+					{{ form_label(form.duration, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.duration, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.duration, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
 			</div>
-		{% endif %}
 
-		<div class="form-group">
-			{{ form_label(form.place) }}
+			<div class="space-y-4">
+				<div>
+					{{ form_label(form.maxRegistration, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.maxRegistration, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.maxRegistration, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
+
+				<div>
+					{{ form_label(form.description, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.description, {'attr': {'class': 'w-full border-gray-300 rounded-lg shadow-sm'}}) }}
+					{{ form_errors(form.description, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
+
+				<div>
+					{{ form_label(form.site, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+					{{ form_widget(form.site, {'attr': {'class': 'w-full p-2 rounded-lg shadow-md'}}) }}
+					{{ form_errors(form.site, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+				</div>
+
+				{% if is_granted('ROLE_ADMIN') %}
+					<div>
+						{{ form_label(form.state, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+						{{ form_widget(form.state, {'attr': {'class': 'w-full p-2 rounded-lg shadow-md'}}) }}
+						{{ form_errors(form.state, {'attr': {'class': 'text-red-500 text-sm'}}) }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<div>
+			{{ form_label(form.place, null, {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
 			<div class="flex items-center space-x-2">
-				{{ form_widget(form.place, {'attr': {'class': 'form-select w-full'}}) }}
-				<button type="button" class="text-cyan-600 px-6 py-2 border-2 border-cyan-600 rounded-full hover:bg-cyan-600 transition hover:text-white" data-modal-target="#addPlaceModal">
-					Ajouter un lieu
-				</button>
+				{{ form_widget(form.place, {'attr': {'class': 'w-full p-2 rounded-lg shadow-md'}}) }}
 			</div>
-			{{ form_errors(form.place) }}
+			{{ form_errors(form.place, {'attr': {'class': 'text-red-500 text-sm'}}) }}
 		</div>
 
-		<button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition" name="state" value="1">
-			Enregistrer
-		</button>
-		<a href="{{ path('activity_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">Annuler</a>
+		<div class="flex justify-between items-center mt-6 gap-4">
+			<button type="button" class="text-cyan-600 border-2 border-cyan-600 px-6 py-2 rounded-full hover:bg-cyan-600 hover:text-white transition" data-modal-target="#addPlaceModal">
+				Ajouter un lieu
+			</button>
+			<div class="flex flex-row items-center gap-4">
+				<button type="submit" class="border-none bg-cyan-600 text-white px-6 py-2 rounded-full hover:bg-cyan-700 transition" name="state" value="1">
+					Enregistrer
+				</button>
+				<a href="{{ path('activity_list') }}" class="text-cyan-600 hover:text-cyan-700 transition">
+					Annuler
+				</a>
+			</div>
+		</div>
 
 		{{ form_end(form) }}
 	</section>
+
 	{{ include('components/placeModal.html.twig') }}
 {% endblock %}

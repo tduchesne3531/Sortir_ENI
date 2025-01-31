@@ -1,20 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SiteController!{% endblock %}
+{% block title %}Liste des lieux{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-        .search-bar { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .search-bar input[type="text"] { flex: 1; margin-right: 10px; padding: 5px; }
-        .add-button { text-align: right; margin-top: 20px; }
-    </style>
 
     <div class="example-wrapper">
         <div class="search-bar">
             <form method="get" action="{{ path('place_search') }}">
-                <label for="search">Le nom contient :</label>
+                <label for="search" class="text-gray-600 font-semibold mr-4">Le nom contient :</label>
                 <input
                         type="text"
                         id="search"
@@ -22,17 +15,17 @@
                         placeholder="Rechercher un lieu"
                         value="{{ app.request.query.get('search') }}"
                 >
-                <button type="submit" class="btn btn-primary">Rechercher</button>
+                <button type="submit" class="border-none align-middle">
+                    <span class="material-symbols-rounded text-3xl text-cyan-600">search</span>
+                </button>
             </form>
         </div>
 
         {% include 'components/places.html.twig' %}
 
-        <div class="add-button">
-            <a href="{{ path('place_add') }}" class="btn btn-success">Ajouter</a>
+        <div class="flex justify-end mt-6">
+            <a href="{{ path('place_add') }}" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">Ajouter</a>
         </div>
-
-
     </div>
 {% endblock %}
 

@@ -20,7 +20,7 @@
 						{% endif %}
 					{% endfor %}
 				{% endif %}
-				<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-gray-500" data-name="{{ activity.name|lower }}" data-date="{{ activity.dateStartTime|date('Y-m-d') }}" data-site="{{ activity.site.id }}" data-participation="{{ isUserRegistered ? 'participating' : 'not_participating' }}">
+				<article class="lg:min-w-3xl bg-white shadow-md rounded-2xl px-8 py-4 border border-gray-200 hover:shadow-gray-500" data-name="{{ activity.name|lower }}" data-date="{{ activity.dateStartTime|date('Y-m-d') }}" data-site="{{ activity.site.id }}" data-participation="{{ isUserRegistered ? 'participating' : 'not_participating' }}">
 					<a href="{{ path('activity_detail', { id: activity.id }) }}" class="m-0 p-0">
 						<h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ activity.name }}">
 							{{ activity.name }}

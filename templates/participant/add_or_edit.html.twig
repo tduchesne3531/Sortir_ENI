@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+	{{ mode == 'edit' ? 'Modifier ' ~ participant.firstName ~ ' ' ~ participant.lastName : (mode == 'add' ? 'Ajouter un participant' : participant.firstName ~ ' ' ~ participant.lastName) }}
+{% endblock %}
+
 {% block body %}
 
 	<h1 class="text-3xl font-bold text-center mb-8">
