@@ -1,63 +1,62 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Détail du participant
+	Détail du participant
 {% endblock %}
 
 {% block body %}
 
-    <h1 class="text-3xl">{{ participant.firstName }} {{ participant.lastName }} profile</h1>
+	<h1 class="text-3xl">{{ participant.firstName }}
+		{{ participant.lastName }}
+		profile</h1>
 
-    <article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 mt-4">
-        {% if (participant.photo) %}
-            <div class="text-center mb-4">
-                <img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 h-48 rounded-full mx-auto border-2 border-cyan-600 object-cover object-top">
-            </div>
-        {% endif %}
-        <h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ participant.firstname }} | {{ participant.lastname }}">
-            {{ participant.firstname }}
-            {{ participant.lastname }}
-        </h2>
-        <ul class="text-gray-600 mb-6 space-y-2">
-            <li>
-                <span class="font-semibold">Pseudo:</span>
-                {{ participant.pseudo }}</li>
-            <li>
-                <span class="font-semibold">Email:</span>
-                {{ participant.email }}</li>
-            <li>
-                <span class="font-semibold">Phone:</span>
-                {{ participant.phone }}</li>
-            <li>
-                <span class="font-semibold">Site:</span>
-                {{ participant.site.name }}</li>
-            <li>
-                <span class="font-semibold">Admin:</span>
-                {{ participant.isAdmin ? 'Yes' : 'No' }}</li>
-            <li>
-                <span class="font-semibold">Active:</span>
-                {{ participant.isActive ? 'Yes' : 'No' }}</li>
-        </ul>
-        <div class="flex flex-wrap justify-center items-center gap-4">
-            <a
-                    href="{{ path('participant_edit', {'id': participant.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition items-center gap-2">
-                <span class="material-symbols-rounded text-3xl">edit</span>
-            </a>
-            <a
-                    href="{{ path('participant_delete', {'id': participant.id }) }}" class="text-red-500 px-4 py-2 rounded-full hover:text-red-700 transition items-center gap-2">
-                <span class="material-symbols-rounded text-3xl">delete</span>
-            </a>
-            <a
-                    href="{{ path('participant_disable', {'id': participant.id }) }}" class="{{ participant.isActive ? 'text-gray-500' : 'text-success' }} px-4 py-2 rounded-full hover:transition items-center gap-2">
-                <span class="material-symbols-rounded text-3xl">
-                    {{ participant.isActive ? 'block' : 'lock_open' }}
-                </span>
-            </a>
+	<article class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 mt-4">
+		{% if (participant.photo) %}
+			<div class="text-center mb-4">
+				<img src="{{ path('file_download', { filePath: participant.photo }) }}" alt="{{ participant.pseudo }}" class="w-48 h-48 rounded-full mx-auto border-2 border-cyan-600 object-cover object-top">
+			</div>
+		{% endif %}
+		<h2 class="text-lg font-bold text-gray-800 mb-4 text-center" title="{{ participant.firstname }} | {{ participant.lastname }}">
+			{{ participant.firstname }}
+			{{ participant.lastname }}
+		</h2>
+		<ul class="text-gray-600 mb-6 space-y-2">
+			<li>
+				<span class="font-semibold">Pseudo:</span>
+				{{ participant.pseudo }}</li>
+			<li>
+				<span class="font-semibold">Email:</span>
+				{{ participant.email }}</li>
+			<li>
+				<span class="font-semibold">Phone:</span>
+				{{ participant.phone }}</li>
+			<li>
+				<span class="font-semibold">Site:</span>
+				{{ participant.site.name }}</li>
+			<li>
+				<span class="font-semibold">Admin:</span>
+				{{ participant.isAdmin ? 'Yes' : 'No' }}</li>
+			<li>
+				<span class="font-semibold">Active:</span>
+				{{ participant.isActive ? 'Yes' : 'No' }}</li>
+		</ul>
+		<div class="flex flex-wrap justify-center items-center gap-4">
+			<a href="{{ path('participant_edit', {'id': participant.id }) }}" class="text-yellow-500 px-4 py-2 rounded-full hover:text-yellow-600 transition items-center gap-2">
+				<span class="material-symbols-rounded text-3xl">edit</span>
+			</a>
+			<a href="{{ path('participant_delete', {'id': participant.id }) }}" class="text-red-500 px-4 py-2 rounded-full hover:text-red-700 transition items-center gap-2">
+				<span class="material-symbols-rounded text-3xl">delete</span>
+			</a>
+			<a href="{{ path('participant_disable', {'id': participant.id }) }}" class="{{ participant.isActive ? 'text-gray-500' : 'text-success' }} px-4 py-2 rounded-full hover:transition items-center gap-2">
+				<span class="material-symbols-rounded text-3xl">
+					{{ participant.isActive ? 'block' : 'lock_open' }}
+				</span>
+			</a>
 
-            <a href="{{ path('participant_list') }}" class="text-cyan-600 px-6 py-2 hover:text-cyan-700 transition">
-                Retour à la liste
-            </a>
-        </div>
-    </article>
+			<a href="{{ path('participant_list') }}" class="text-cyan-600 px-6 py-2 hover:text-cyan-700 transition">
+				Retour à la liste
+			</a>
+		</div>
+	</article>
 
 {% endblock %}

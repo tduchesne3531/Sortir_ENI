@@ -100,8 +100,8 @@
 						<span class="material-symbols-rounded text-3xl">cancel</span>
 					</button>
 				{% else %}
-					<a href="{{ path('activity_cancel', { id: activity.id }) }}" class="text-cyan-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
-						<span class="material-symbols-rounded text-3xl"></span>
+					<a href="{{ path('activity_cancel', { id: activity.id }) }}" class="text-green-600 px-4 py-2 rounded-full hover:text-green-700 transition flex items-center gap-2">
+						<span class="material-symbols-rounded text-3xl">lock_open_right</span>
 						Ouvrir
 					</a>
 				{% endif %}

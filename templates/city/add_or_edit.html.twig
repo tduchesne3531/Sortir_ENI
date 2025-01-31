@@ -1,35 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ city.name ? 'Modifier' : 'Créer' }} une ville{% endblock %}
+{% block title %}
+	{{ city.name ? 'Modifier' : 'Créer' }}
+	une ville
+{% endblock %}
 
 {% block body %}
 
-    <div>
-        <h1 class="text-3xl font-bold text-center mb-8">{{ city.name ? 'Modifier' : 'Créer' }} une ville</h1>
+	<div>
+		<h1 class="text-3xl font-bold text-center mb-8">{{ city.name ? 'Modifier' : 'Créer' }}
+			une ville</h1>
 
-        <section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
-            {{ form_start(form) }}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {% for child in form %}
-                        <div>
-                            {% if child.vars.block_prefixes[1] != 'hidden' %}
-                                {{ form_label(child) }}
-                                {{ form_widget(child) }}
-                                {{ form_errors(child) }}
-                            {% endif %}
+		<section class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 max-w-3xl mx-auto">
+			{{ form_start(form) }}
+			{% for child in form %}
+				{{ form_label(child) }}
+				{{ form_widget(child) }}
+				{{ form_errors(child) }}
+			{% endfor %}
 
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <div class="flex justify-end mt-6">
-                    <button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">{{ city.name ? 'Modifier' : 'Créer' }}</button>
-                    <a href="{{ path('city_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">
-                        Back to list
-                    </a>
-                </div>
-            {{ form_end(form) }}
-        </section>
-    </div>
+			<div class="flex justify-end mt-6">
+				<button type="submit" class="bg-cyan-600 text-white px-6 py-2 border-none rounded-full hover:bg-cyan-700 transition">{{ city.name ? 'Modifier' : 'Créer' }}</button>
+				<a href="{{ path('city_list') }}" class="text-cyan-600 px-6 py-2 rounded-lg hover:text-cyan-700 transition">
+					Retour à la liste
+				</a>
+			</div>
+			{{ form_end(form) }}
+		</section>
+	</div>
 
 {% endblock %}
