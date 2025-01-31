@@ -61,7 +61,11 @@
 			<ul class="list-disc ml-6 text-gray-600">
 				{% for participant in activity.participants %}
 					<li>{{ participant.firstname }}
-						{{ participant.lastname }}</li>
+						{{ participant.lastname }}
+						<a href="{{ path('participant_detail', {'id': participant.id}) }}"
+						   class="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-700 text-sm">
+							Détails
+						</a></li>
 				{% endfor %}
 			</ul>
 		{% else %}
