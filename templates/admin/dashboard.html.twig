@@ -7,8 +7,11 @@
 	<div class="container mx-auto p-6">
 		<h1 class="text-3xl font-bold mb-6">Dashboard Administrateur</h1>
 
+
+		<a href="{{ path('admin_import') }}" class="border-none bg-cyan-600 rounded-full p-4 mb-8 text-white">Importer une liste de participant par fichier .csv</a>
+
 		<div
-			class="grid grid-cols-1 md:grid-cols-3 gap-6">
+			class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
 			<!-- Carte Participants -->
 			<a href="{{ path('participant_list') }}" class="block bg-white shadow-lg rounded-lg p-6 hover:shadow-gray-500">
 				<h2 class="text-cyan-600 text-xl font-semibold">Gestion des Participants</h2>

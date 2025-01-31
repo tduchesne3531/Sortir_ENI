@@ -32,3 +32,10 @@ services:
     App\Utils\FileUploader:
         arguments:
             $directory: '%directory%'
+
+    App\Service\CsvImporter:
+        arguments:
+            $participantService: '@App\Service\ParticipantService'
+            $siteService: '@App\Service\SiteService'
+            $passwordHasher: '@security.user_password_hasher'
+            $directory: '%directory%'
