@@ -61,10 +61,12 @@ class ParticipantType extends AbstractType
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
+                        // Vérifie que le password n'est pas compromis
                         new NotCompromisedPassword([
                             'message' => 'Ce mot de passe a été compromis dans une fuite de données. Veuillez en choisir un autre.',
                         ]),
                         new Assert\Regex([
+                            // Ajout d'une regex pour obliger l'utilisation d'une majuscule, d'une minuscule, d'un chiffre et d'un caractère spécial
                             'pattern' => "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/",
                             'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.',
                         ]),
@@ -132,8 +134,6 @@ class ParticipantType extends AbstractType
                                 // max length allowed by Symfony for security reasons
                                 'max' => 4096,
                             ]),
-//                        new PasswordStrength(),
-//                        new NotCompromisedPassword(),
                         ],
                         'label' => 'Mot de passe',
                         'label_attr' => ['class' => 'block text-gray-700 font-semibold mb-1'],

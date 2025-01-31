@@ -39,18 +39,20 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifier);
 
         return new Passport(
+            // Ajout de la possibilité de se connecter avec email ou pseudo
             new UserBadge($identifier, function ($identifier) {
                 return $this->userRepository->findOneBy(['email' => $identifier])
                     ?? $this->userRepository->findOneBy(['pseudo' => $identifier]);
             }),
             new PasswordCredentials($password),
             [
+                // Empeche les attaques de type Cross Site Request Forgery
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                // Ajout d'un token RememberMe (si demandé lors de la connexion)
                 new RememberMeBadge(),
             ]
         );
     }
-
 
     /**
      * @throws Exception
