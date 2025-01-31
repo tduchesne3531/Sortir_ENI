@@ -3,7 +3,7 @@
 		<h1 class="text-3xl text-cyan-600">Filtrer les activités</h1>
 
 		{{ form_start(form, { 'method': 'get' }) }}
-		<div class="flex flex-row gap-4">
+		<div class="flex flex-col lg:flex-row flex-wrap lg:items-start gap-4">
 			<div class="col-md-4">
 				{{ form_label(form.site) }}
 				{{ form_widget(form.site, { 'attr': { 'class': 'form-control' } }) }}
